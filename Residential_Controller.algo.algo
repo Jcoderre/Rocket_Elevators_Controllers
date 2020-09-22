@@ -1,0 +1,146 @@
+/******************************************************************|
+*   This pseudo code is about the residential elevator controllers.|
+* _________________________________________________________________|
+*           it is based on the fact that we have :                 |
+*                                                                  |
+*                  - 1 column of 2 elevators,                      |
+*                  - 10 floors                                     |
+*__________________________________________________________________|
+*           The facts that those object can be moved :             |
+*                                                                  |
+*                  - Column,                                       |
+*                  - Elevator,                                     |
+*                  - Call Button ( Outside the elevator ),         |
+*                  - Doors ( Elevator Doors ),                     |
+*                  - Elevator Button  ( inside the elevator )      |
+*_________________________________________________________________ |
+*           Button that can be found outside the elevator :        |
+*                                                                  |
+*                  - Up                                            |
+*                  - Down                                          |
+*_________________________________________________________________ | 
+*           Button that can be found in the elevator :             |
+*                                                                  |
+*                  - Buttons from 1 to 10                          |
+*                  - Emergency stop Button                         |
+*                  - Open Doors                                    |
+*                  - Close Doors                                   |
+*_________________________________________________________________ |
+*                                                                  |
+*            PseudoCode written By : J.Coderre                     |
+*                 Date of creation : 2020-09-21                    |
+*                                                                  |
+******************************************************************/
+
+START
+
+// var time_Now = new Date().getTime();
+INPUT time_Now = GET current time 
+
+// var elevator_Floor = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+INPUT elevator_Floor SET value for those values in the array: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+INPUT elevator_Queue = []
+
+INPUT elevator_Max_Weight = 850
+
+
+/****************   Display programs   **********************/
+
+PROGRAM ShowTime()
+    DISPLAY the time somewhere in the elevator;
+END
+
+PROGRAM display_Btn_Active()
+    IF user input buttons
+        IF buttons are still in queue
+            Activate buttons light
+        ELSE IF buttons are no more in queue
+            Desactivate button light
+        END
+    END
+END
+
+PROGRAM display_Active_Floor()
+    IF elevator is on a floor 
+        Avtivate active floor on intern and extern display
+    END
+END
+
+/************************ Elevator programs ***************************/
+
+PROGRAM Initialize()
+    IF elevator is IDLE for 5 minutes
+        go down to first floor
+        Slow Down when necessary // SlowDownIfNecessary(), DoubleSafetyStop()
+        IF a Queue is activate AND other elevator is busy and unable to take request
+            IF  the queue is traveling down 
+                add to queue line
+                slow down when necessary // SlowDownSafety(), DoubleSafetyStop()
+                stop at user floor
+            ELSE IF the queue is travelling up
+                slow down when necessary // SlowDownSafety(), DoubleSafetyStop()
+                stop at next floor
+                take queue query
+            END
+        END 
+    END
+END
+
+PROGRAM Queue()
+    Create an a array of request
+    Execute that array in order
+        IF elevator is traveling
+            ADD to queue all Call Buttons on the way
+            ADD to queue all elevator button on the way
+        END
+    END
+END
+
+PROGRAM Open_and_Close_Doors()
+    IF door open
+        start Countdown 20 seconds
+        IF the button Close_Door is pressed
+            set countdown to 3 seconds
+        ELSE IF the countdown reach 0
+            start PROGRAM DoorCloseFailSafe()
+    END
+END
+
+/****************** Safety Programs  *******************/
+
+PROGRAM SlowDownSafety()
+    IF we are traveling up at full speed
+        IF we are only 1 floor away from the lowest destination floor
+            slow down
+        END
+    ELSE IF we are traveling down at full speed
+        IF we are only 1 floor away from the highest destination floor
+            slow down
+        END
+    END
+END
+
+PROGRAM DoubleSafetyStop()
+    IF we are traveling up at full speed 
+        IF we are at floor 9
+            Slow Down
+            Stop at floor 10
+        END
+    ELSE IF we are traveling down at full speed
+        IF we are at floor 2 
+            slow down
+            stop at floor 1
+        END
+    END
+END
+
+PROGRAM DoorCloseFailSafe()
+    WHILE door close
+        IF something obstruct the door OR something pass in between the door OR the button Open_Door is pressed
+            stop the action of the doors
+            open doors
+        ELSE 
+            close doors
+    END
+END
