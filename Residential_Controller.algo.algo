@@ -34,7 +34,7 @@
 
 START
 
-// var time_Now = new Date().getTime();
+' var time_Now = new Date().getTime();
 INPUT time_Now = GET current time 
 
 
@@ -42,76 +42,57 @@ INPUT time_Now = GET current time
 
 DEFINE Column USING id AND status:****
     ID: id,
-    Status: status,   'MAINTENANCE / MOVING or IDLE
+    Status: status,   
     ElevatorList: SET to empty List
 
-    SEQUENCE createElevatorList USING elevator_amount   '' METHODS
-        IF elevator are unable to take request
-        Create an a array of pending request
-        END
-        ELSE IF available
-            Create an a array of request
-            Execute that array in order
-            IF elevator is traveling
-                ADD to queue all Call Buttons on the way
-                ADD to queue all elevator button on the way
-            END
-        ELSE IF request queue end check for pending request
-            IF request are pending 
-                Execute that array in order
-            ELSE IF no request are pending
-            END
-        END  
+    SEQUENCE createElevatorList USING elevator_amount   
+       
     ENDSEQUENCE
     SEQUENCE   createStatus    
 
     ENDSEQUENCE
 ENDDEFINE
-SET column1 TO INSTANTIATE Column WITH 1 AND online
-SET column1 status TO offline
 
 
-DEFINE Elevator USING id AND status AND Max_Weight AND Elevator_Weight:*****
+DEFINE Elevator USING id AND status AND Max_Weight AND Elevator_Weight:
     ID: id,
-    Status: status,  ' MAINTENANCE / MOVING or IDLE
-    Elevator_Weight: 0,
-    Max_Weight: 2100,  'Max_Weight values ar calculate in  pound (LBS)
-    ElevatorList: SET to empty List
+    SET status to IDLE      ' MOVING or IDLE or STOP
+    Elevator_Weight: 0,     ' Elevator starting weight
+    Max_Weight: 2100,       ' Max_Weight values ar calculate in  pound (LBS)
+    Elevator_queue: SET to empty List
 
-    SEQUENCE createElevatorList USING elevator_amount
-        IF elevator are unable to take request
-            Create an a array of pending request
+    WHEN button_Up is pressed
+        SET user_travel to up
+        EXECUTE program display_Btn_Active()
+        ADD to elevator_queue 
+
+    WHEN button_Down is pressed
+        SET user_travel to down
+        EXECUTE program display_Btn_Active()
+        ADD to Elevator_queue
+
+    WHEN Button_Is_Press
+    EXECUTE program display_Btn_Active()
+        IF user_input > current_floor 
+            SET user_travel to up
+            ADD to Elevator_queue
+        ELSE IF user_input < current_Floor
+            SET user_travel to down
+            ADD to Elevator_queue
         END
-        ELSE IF available
-            Create an a array of request
-            Execute that array in order
-            IF elevator is traveling
-                ADD to queue all Call Buttons on the way
-                ADD to queue all elevator button on the way
-            END
-        ELSE IF request queue end check for pending request
-            IF request are pending 
-                Execute that array in order
-            ELSE IF no request are pending 
-            END
-        END
-    ENDSEQUENCE
 
-    SEQUENCE createStatus  
-            IF Maintenance_Input equal to active
-                SET status to Maintenance
-            ELSE IF 
+    WHEN Elevator_queue is empty
+        SET status to IDLE
 
-            ELSE IF 
-
-            END
-    ENDSEQUENCE
+    WHEN Elevator_queue is not empty
+        SET status to MOVING
+    
 
     SEQUENCE createElevatorWeight 
             SET total to zero
-            FOR the counter is les than or equal to Max_Weight (2100)
+            FOR the counter is less than or equal to Max_Weight (2100)
                 ADD counter to total
-            ENDWHILE
+            ENDFOR
             SET Elevator_Weight
     ENDSEQUENCE
 
@@ -124,7 +105,7 @@ SET Elevator1 status TO offline
 '/****************   Display programs   **********************/
 
 PROGRAM ShowTime()
-    DISPLAY the time somewhere in the elevator;
+    DISPLAY the time somewhere in the elevator; ' Display time_Now
 END
 
 PROGRAM display_Btn_Active()
@@ -197,6 +178,11 @@ PROGRAM Open_and_Close_Doors()
     END
 END
 
+PROGRAM timer()
+    Create a variable for a 20 seconds time left
+
+END
+
 PROGRAM Anti_Shenanigans()
     IF all input request in elevator are set in less then 5 seconds
         reset the elevator PROGRAM Queue()
@@ -251,6 +237,38 @@ END
 
 '/******************* Operative ***********************/
 
+SEQUENCE request_Floor()      ' Request OUTSIDE elevator
+    WHEN button_Up is pressed
+        SET user_travel to up
+        EXECUTE program display_Btn_Active()
+        ADD to elevator_queue 
+
+    WHEN button_Down is pressed
+        SET user_travel to down
+        EXECUTE program display_Btn_Active()
+        ADD to Elevator_queue
+
+ENDSEQUENCE
+
+SEQUENCE request_Elevator()     ' Request INSIDE Elevator
+    WHEN Button_Is_Press
+    EXECUTE program display_Btn_Active()
+        IF user_input > current_floor 
+            SET user_travel to up
+            ADD to Elevator_queue
+        ELSE IF user_input < current_Floor
+            SET user_travel to down
+            ADD to Elevator_queue
+        END
+ENDSEQUENCE
+
+SEQUENCE Find_Elevator()     ' Choose Elevator
+
+ENDSEQUENCE
+
+
+
+
 SEQUENCE Elevator_Move_Schema()
 
     EXECUTE program ShowTime(), 
@@ -258,30 +276,31 @@ SEQUENCE Elevator_Move_Schema()
     EXECUTE program display_Active_Floor(),
     EXECUTE program Anti_Shenanigans()
 
-    IF elevator is at the same floor
-        wait 1 seconds
-        EXECUTE PROGRAM Elevator_Overweight()
-        EXECUTE program Open_and_Close_Doors()
-        IF door is close 
-            EXECUTE program Queue() of user input
-        ELSE
-            wait
-        END
-    ELSE IF elevator is > then the request AND request go down
-            IF elevator is 2 floor away or more from requested floor
-                Travel full speed to destination
-                EXECUTE program SlowDownSafety() AND DoubleSafetyStop()
+    
+        IF elevator is at the same floor
+            EXECUTE PROGRAM Elevator_Overweight()
+            EXECUTE program Open_and_Close_Doors()
+            IF door is close 
+                EXECUTE program Queue() of user input
             ELSE
-                travel normal speed to destination
-                EXECUTE program SlowDownSafety() AND DoubleSafetyStop()
+                wait
             END
-    ELSE IF elevator is < then the request AND request go down
-             IF elevator is 2 floor away or more from requested floor
-                Travel full speed to destination
-                EXECUTE program SlowDownSafety() AND DoubleSafetyStop()
-            ELSE
-                travel normal speed to destination
-                EXECUTE program SlowDownSafety() AND DoubleSafetyStop()
-            END
-    EXECUTE program Initialize()
+        ELSE IF elevator is > then the request AND request go down
+                IF elevator is 2 floor away or more from requested floor
+                    Travel full speed to destination
+                    EXECUTE program SlowDownSafety() AND DoubleSafetyStop()
+                ELSE
+                    travel normal speed to destination
+                    EXECUTE program SlowDownSafety() AND DoubleSafetyStop()
+                END
+        ELSE IF elevator is < then the request AND request go down
+                IF elevator is 2 floor away or more from requested floor
+                    Travel full speed to destination
+                    EXECUTE program SlowDownSafety() AND DoubleSafetyStop()
+                ELSE
+                    travel normal speed to destination
+                    EXECUTE program SlowDownSafety() AND DoubleSafetyStop()
+                END
+        EXECUTE program Initialize()
+
 ENDSEQUENCE
