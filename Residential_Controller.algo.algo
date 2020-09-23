@@ -1,4 +1,4 @@
-/******************************************************************|
+"/******************************************************************|
 *   This pseudo code is about the residential elevator controllers.|
 * _________________________________________________________________|
 *           it is based on the fact that we have :                 |
@@ -30,22 +30,98 @@
 *            PseudoCode written By : J.Coderre                     |
 *                 Date of creation : 2020-09-21                    |
 *                                                                  |
-******************************************************************/
+******************************************************************/"
 
 START
 
 // var time_Now = new Date().getTime();
 INPUT time_Now = GET current time 
 
-// var elevator_Floor = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-INPUT elevator_Floor SET value for those values in the array: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
-INPUT elevator_Queue = []
+'/****************   Object ********************/
 
-INPUT elevator_Max_Weight = 850
+DEFINE Column USING id AND status:****
+    ID: id,
+    Status: status,   'MAINTENANCE / MOVING or IDLE
+    ElevatorList: SET to empty List
+
+    SEQUENCE createElevatorList USING elevator_amount   '' METHODS
+        IF elevator are unable to take request
+        Create an a array of pending request
+        END
+        ELSE IF available
+            Create an a array of request
+            Execute that array in order
+            IF elevator is traveling
+                ADD to queue all Call Buttons on the way
+                ADD to queue all elevator button on the way
+            END
+        ELSE IF request queue end check for pending request
+            IF request are pending 
+                Execute that array in order
+            ELSE IF no request are pending
+            END
+        END  
+    ENDSEQUENCE
+    SEQUENCE   createStatus    
+
+    ENDSEQUENCE
+ENDDEFINE
+SET column1 TO INSTANTIATE Column WITH 1 AND online
+SET column1 status TO offline
 
 
-/****************   Display programs   **********************/
+DEFINE Elevator USING id AND status AND Max_Weight AND Elevator_Weight:*****
+    ID: id,
+    Status: status,  ' MAINTENANCE / MOVING or IDLE
+    Elevator_Weight: 0,
+    Max_Weight: 2100,  'Max_Weight values ar calculate in  pound (LBS)
+    ElevatorList: SET to empty List
+
+    SEQUENCE createElevatorList USING elevator_amount
+        IF elevator are unable to take request
+            Create an a array of pending request
+        END
+        ELSE IF available
+            Create an a array of request
+            Execute that array in order
+            IF elevator is traveling
+                ADD to queue all Call Buttons on the way
+                ADD to queue all elevator button on the way
+            END
+        ELSE IF request queue end check for pending request
+            IF request are pending 
+                Execute that array in order
+            ELSE IF no request are pending 
+            END
+        END
+    ENDSEQUENCE
+
+    SEQUENCE createStatus  
+            IF Maintenance_Input equal to active
+                SET status to Maintenance
+            ELSE IF 
+
+            ELSE IF 
+
+            END
+    ENDSEQUENCE
+
+    SEQUENCE createElevatorWeight 
+            SET total to zero
+            FOR the counter is les than or equal to Max_Weight (2100)
+                ADD counter to total
+            ENDWHILE
+            SET Elevator_Weight
+    ENDSEQUENCE
+
+ENDDEFINE
+SET Elevator1 TO INSTANTIATE Elevator WITH 1 AND online
+SET Elevator1 status TO offline
+
+
+
+'/****************   Display programs   **********************/
 
 PROGRAM ShowTime()
     DISPLAY the time somewhere in the elevator;
@@ -67,7 +143,7 @@ PROGRAM display_Active_Floor()
     END
 END
 
-/************************ Elevator programs ***************************/
+'/************************ Elevator programs ***************************/
 
 PROGRAM Initialize()
     IF elevator is IDLE for 5 minutes
@@ -87,17 +163,31 @@ PROGRAM Initialize()
     END
 END
 
-PROGRAM Queue()
-    Create an a array of request
-    Execute that array in order
-        IF elevator is traveling
-            ADD to queue all Call Buttons on the way
-            ADD to queue all elevator button on the way
+PROGRAM Queue()*****
+    IF elevator MOVE OR IDLE
+        IF elevator are unable to take request
+            Create an a array of pending request
+        END
+        ELSE IF available
+            Create an a array of request
+            Execute that array in order
+            IF elevator is traveling
+                ADD to queue all Call Buttons on the way
+                ADD to queue all elevator button on the way
+            END
+        ELSE IF request queue end check for pending request
+            IF request are pending 
+                Execute that array in order
+            ELSE IF no request are pending
+                EXECUTE program Initialize()
+            END
         END
     END
 END
 
 PROGRAM Open_and_Close_Doors()
+    open door
+    EXECUTE program Elevator_Overweight()
     IF door open
         start Countdown 20 seconds
         IF the button Close_Door is pressed
@@ -107,7 +197,13 @@ PROGRAM Open_and_Close_Doors()
     END
 END
 
-/****************** Safety Programs  *******************/
+PROGRAM Anti_Shenanigans()
+    IF all input request in elevator are set in less then 5 seconds
+        reset the elevator PROGRAM Queue()
+    END
+END
+
+'/****************** Safety Programs  *******************/
 
 PROGRAM SlowDownSafety()
     IF we are traveling up at full speed
@@ -144,3 +240,48 @@ PROGRAM DoorCloseFailSafe()
             close doors
     END
 END
+
+PROGRAM Elevator_Overweight()****
+    IF Elevator_Weight is higher then Max_Weight // If elevator weight > Max_Weight
+        STOP countdown
+        Door remain open
+    END
+END
+
+
+'/******************* Operative ***********************/
+
+SEQUENCE Elevator_Move_Schema()
+
+    EXECUTE program ShowTime(), 
+    EXECUTE program display_Btn_Active(),
+    EXECUTE program display_Active_Floor(),
+    EXECUTE program Anti_Shenanigans()
+
+    IF elevator is at the same floor
+        wait 1 seconds
+        EXECUTE PROGRAM Elevator_Overweight()
+        EXECUTE program Open_and_Close_Doors()
+        IF door is close 
+            EXECUTE program Queue() of user input
+        ELSE
+            wait
+        END
+    ELSE IF elevator is > then the request AND request go down
+            IF elevator is 2 floor away or more from requested floor
+                Travel full speed to destination
+                EXECUTE program SlowDownSafety() AND DoubleSafetyStop()
+            ELSE
+                travel normal speed to destination
+                EXECUTE program SlowDownSafety() AND DoubleSafetyStop()
+            END
+    ELSE IF elevator is < then the request AND request go down
+             IF elevator is 2 floor away or more from requested floor
+                Travel full speed to destination
+                EXECUTE program SlowDownSafety() AND DoubleSafetyStop()
+            ELSE
+                travel normal speed to destination
+                EXECUTE program SlowDownSafety() AND DoubleSafetyStop()
+            END
+    EXECUTE program Initialize()
+ENDSEQUENCE
