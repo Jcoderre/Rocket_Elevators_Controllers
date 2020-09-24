@@ -29,3 +29,69 @@
 *                                                                  |
 ******************************************************************/"
 
+DEFINE battery USING amountOfColumns AND minFloor AND maxFloor and amountOfElevatorPerColumn
+    columnList: empty List
+
+    SEQUENCE createColumns USING minFloor, maxFloor, amountOfElevatorPerColumn
+        SET iterator TO 1
+        FOR amountOfColumns
+            SET newColumn TO INSTANTIATE Column WITH iterator, minFloor, maxFloor, amountOfElevatorPerColumn
+            ADD newColumn TO columnList
+            INCREMENT iterator
+        ENDFOR
+    ENDSEQUENCE
+
+    CALL createColumns WITH minFloor, maxFloor, amountOfElevatorPerColumn 
+
+ENDDEFINE
+
+DEFINE Column USING _id AND minimiumFloor AND maxFloor AND amountOfElevatorPerColumn AND 
+    ID: id    
+    minimumFloor: minFloor
+    maximumFloor: maxFloor
+    ElevatorList: empty List
+    status: IDLE
+    callButtonsList: empty LIST
+
+    SET amountOfFloor TO (maximumFloor - minimumFloor)
+
+    CALL createElevator WITH amountOfElevatorPerColumn
+    CALL createCallButtons WITH amountOfFloor
+   
+    SEQUENCE createElevator USING amountOfElevatorPerColumn
+        SET iterator TO 1
+        For amountOfElevatorPerColumn           
+            SET newElevator TO INSTANTIATE Elevator with iterator
+            ADD newElevator TO ElevatorList
+            INCREMENT iterator BY 1
+        ENDFOR
+     ENDSEQUENCE
+
+     SEQUENCE createCallButtons USING amountOfFloor
+        SET iterator TO minimumFloor
+        FOR amountOfFloor
+            IF iterator NOT EQUALS TO maximumFloor
+                SET newCallButtonUp TO INSTANTIATE CallButton WITH up AND iterator
+                ADD newCallButtonUp TO callButtonsList
+            ENDIF
+            IF iterator IS GREATER THAN minimumFloor
+                SET newCallButtonDown TO INSTANTIATE CallButton WITH down AND iterator                
+                ADD newCallButtonUp TO callButtonsList
+            ENDIF
+            INCREMENT iterator BY 1
+        ENDFOR
+     ENDSEQUENCE
+
+ENDDEFINE
+
+DEFINE Elevator USING id
+    ID: id
+    Elevator_queue to empty List
+    requestButtonList: empty LIST
+    status to IDLE                               ' MOVING or IDLE 
+    Direction : NULL                 ' Elevator_UP or Elevator_Down
+    currentFloor: 1     
+    doors : Close   ' Close or Open
+ENDDEFINE
+
+SET baterry1 to INSTANTIATE Battery WITH 4, -6, 60, 3

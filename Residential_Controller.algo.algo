@@ -40,86 +40,133 @@ INPUT time_Now = GET current time
 
 '/****************   Object ********************/
 
-DEFINE Column 
-    ID: id,   
-    ElevatorList: SET to empty List
 
-    SEQUENCE 
-    createElevatorList USING elevator_amount  
+DEFINE Column USING _id AND minFloor AND maxFloor AND elevator_amount 
+    ID: id    
+    minimumFloor: minFloor
+    maximumFloor: maxFloor
+    ElevatorList: empty List
+    status: IDLE
+    callButtonsList: empty LIST
 
-        LET Elevator_Per_Column = 2
-        LET Elevator_array = [];
-        'for (var i = 0; i < Elevator_Per_Column.length; i++) {
-        '    Elevator_array.push[i];
-        '}
-        FOR each elevator in array when max is the NB of elevator per column add elevator to array
-            increment this number to Elevator_array
-    ENDSEQUENCE
+    SET amountOfFloor TO (maximumFloor - minimumFloor)
+
+    CALL createElevator WITH elevator_amount
+    CALL createCallButtons WITH amountOfFloor
+   
+    SEQUENCE createElevator USING elevator_amount
+        SET iterator TO 1
+        For elevator_amount           
+            SET newElevator TO INSTANTIATE Elevator with iterator
+            ADD newElevator TO ElevatorList
+            INCREMENT iterator BY 1
+        ENDFOR
+     ENDSEQUENCE
+
+     SEQUENCE createCallButtons USING amountOfFloor
+        SET iterator TO minimumFloor
+        FOR amountOfFloor
+            IF iterator NOT EQUALS TO maximumFloor
+                SET newCallButtonUp TO INSTANTIATE CallButton WITH up AND iterator
+                ADD newCallButtonUp TO callButtonsList
+            ENDIF
+            IF iterator IS GREATER THAN minimumFloor
+                SET newCallButtonDown TO INSTANTIATE CallButton WITH down AND iterator                
+                ADD newCallButtonUp TO callButtonsList
+            ENDIF
+            INCREMENT iterator BY 1
+        ENDFOR
+     ENDSEQUENCE
+
 ENDDEFINE
-INSTANTIATE Column
 
-
-DEFINE Elevator 
-    ID: id,
-    SET status to IDLE                               ' MOVING or IDLE 
-    SET MovingStatus to MovingStatus                 ' Elevator_UP or Elevator_Down
-    SET Elevator_queue to empty List
-
-    WHEN elevator_queue list go up
-        SET MovingStatus to Elevator_UP
-    WHEN elevator_queue list go down
-        SET MovingStatus to  Elevator_Down
-
-
-    WHEN button_Up is pressed
-        CALL SEQUENCE display_Btn_Active()
-        ADD button_Up  to elevator_queue            ' ADD the floor of button up to elevator queue
-
-    WHEN button_Down is presse
-        CALL SEQUENCE display_Btn_Active()
-        ADD button_Down to Elevator_queue           ' ADD the floor of button up to elevator queue
-
-    WHEN Button_Is_Press
-    CALL SEQUENCE display_Btn_Active()
-        IF (user_input bigger than current_floor) 
-            SET user_travel to up
-            ADD Button_Is_Press to Elevator_queue
-        ELSE IF (user_input smaller than current_Floor)
-            SET user_travel to down
-            ADD Button_Is_Press to Elevator_queue
-        ENDIF
+DEFINE Elevator USING id
+    ID: id
+    Elevator_queue to empty List
+    requestButtonList: empty LIST
+    status to IDLE                               ' MOVING or IDLE 
+    Direction : NULL                              ' Elevator_UP or Elevator_Down
+    currentFloor: 1     
+    doors : Close                                 ' Close or Open
+    
+    'Creating a moving sequence to the elevator'
 
     WHEN Elevator_queue is empty
         SET status to IDLE
 
     WHEN Elevator_queue is not empty
         SET status to MOVING
-    
-ENDDEFINE
-INSTANTIATE Elevator
 
-
-DEFINE User
-    SET Status: status          ' User_up or User_Down
-
-    WHEN button_Up is pressed
-        SET User status to User_up
-        CALL SEQUENCE display_Btn_Active()
-
-    WHEN button_Down is pressed
-        SET user_travel to down
-        CALL SEQUENCE display_Btn_Active()
-
-    WHEN Button_Is_Press
-    CALL SEQUENCE display_Btn_Active()
-        IF (user_input bigger than current_floor) 
-            SET User status to User_up
-        ELSE IF (user_input smaller than current_Floor)
-            SET User status to User_Down
+    SEQUENCE move
+        WHILE elevator status is MOVING
+            IF (elevator is 2 floor away or more from requested floor)
+                Travel full speed to destination
+                CALL SEQUENCE SlowDownSafety() 
+                CALL SEQUENCE DoubleSafetyStop()
+            ELSE
+                travel normal speed to destination
+                CALL SEQUENCE SlowDownSafety()
+                CALL SEQUENCE DoubleSafetyStop()
+            ENDIF  
+        ENDWHILE
+        
+        IF (currentFloor EQUAL Elevator_queue OR requestButtonList )
+            CALL SEQUENCE Open_and_Close_Doors()
+            SET doors to open
+        ELSE
+            SET doors to close
         ENDIF
 
+        WHEN elevator_queue list go up
+            SET Direction to Elevator_UP
+                
+        WHEN elevator_queue list go down
+            SET Direction to  Elevator_Down                
+    ENDSEQUENCE
+
+    
+    
+    
 ENDDEFINE
-INSTANTIATE User
+
+
+DEFINE CallButton USING _direction AND _floor
+    direction: _direction
+    floor: _floor
+
+    WHEN button_Up is pressed
+        SET Direction status to Up
+
+    WHEN button_Down is pressed
+        SET Direction status to Down
+ENDDEFINE
+
+--------------------------------------------------- TEST ------------------------------------------
+
+SET Column1 to INSTANTIATE Column WITH 1, 1, 10, 2
+SET elevator1 to INSTANTIATE Elevator WITH 1
+SET elevator2 to INSTANTIATE Elevator WITH 2
+
+'SCENARIO 1'
+CALL request_Floor WITH 3, Up
+CALL request_Elevator WITH 7
+'SCENARIO 2'
+CALL request_Floor WITH 1, Up
+CALL request_Elevator WITH 6
+
+CALL request_Floor WITH 3, Up
+CALL request_Elevator WITH 5
+
+CALL request_Floor WITH 9, Down
+CALL request_Elevator WITH 2
+'SCENARIO 3'
+CALL request_Floor WITH 3, Down
+CALL request_Elevator WITH 2
+
+CALL request_Floor WITH 10, Down
+CALL request_Elevator WITH 3
+
+--------------------------------------------------END test--------------------------------------------
 
 '/****************   Display SEQUENCEs   **********************/
 
@@ -148,11 +195,11 @@ ENDSEQUENCE
 SEQUENCE Initialize()                ' Go back to Floor 1 if IDLE for to long
     IF (Elevators status IDLE for 10 minutes)
         IF (Button is press  AND other elevator busy )
-            IF  (User status go down) 
+            IF  (CallButton Direction status is Down) 
                 add to Elevator_queue
                 CALL SEQUENCE SlowDownSafety()
                 CALL SEQUENCE DoubleSafetyStop()
-            ELSE IF (User status go up)
+            ELSE IF (CallButton Direction status is Up)
                 ADD to Elevator_queue
                 CALL SEQUENCE SlowDownSafety()
                 CALL SEQUENCE DoubleSafetyStop()
@@ -223,79 +270,55 @@ ENDSEQUENCE
 
 '/******************* Operative ***********************/
 
-SEQUENCE request_Floor()             ' Request OUTSIDE elevator
+SEQUENCE request_Floor USING  floor and direction         ' Request OUTSIDE elevator
     WHEN button_Up is pressed
+        CALL SEQUENCE Find_Elevator() RETURNING elevator
+        ADD floor TO Elevator_queue
+        CALL move OF elevator      
         CALL SEQUENCE display_Btn_Active()
-        CALL SEQUENCE display_Active_Floor()
-        CALL SEQUENCE Find_Elevator() 
+        CALL SEQUENCE display_Active_Floor() 
 
     WHEN button_Down is pressed
+        CALL SEQUENCE Find_Elevator() RETURNING elevator
+        ADD floor TO Elevator_queue
+        CALL move OF elevator
         CALL SEQUENCE display_Btn_Active()
-        CALL SEQUENCE display_Active_Floor(),
-        CALL SEQUENCE Find_Elevator()
+        CALL SEQUENCE display_Active_Floor()
 ENDSEQUENCE
 
-SEQUENCE request_Elevator()           ' Request INSIDE Elevator
+SEQUENCE request_Elevator USING floor         ' Request INSIDE Elevator
     WHEN Button_Is_Press
-    CALL SEQUENCE Anti_Shenanigans()
-    CALL SEQUENCE display_Btn_Active()
-    CALL SEQUENCE display_Active_Floor()
-    ADD to Elevator_queue
+        ADD floor to requestButtonList
+        CALL move OF elevator
+        CALL SEQUENCE Anti_Shenanigans()
+        CALL SEQUENCE display_Btn_Active()
+        CALL SEQUENCE display_Active_Floor()
 ENDSEQUENCE
 
-SEQUENCE Find_Elevator()              ' Choose Elevator
-    WHILE Elevator is Undefined
-        FOR EACH elevator in Elevator_array
-            IF (Elevator status IDLE and closer than other)
-                Add elevator to  Elevator_queue 
-            ELSE IF (elevator is not on same floor than user)
-                IF (user status is User_up )
-                    IF (Elevator MovingStatus is Elevator_UP AND under user floor AND  closer than an other one)
-                        Add elevator to is Elevator_queue
-                    ELSE IF (Elevator status is IDLE AND closer than other)
-                        Add elevator to is Elevator_queue
-                    ELSE 
-                        Dont go
-                    ENDIF
-                ELSE IF (user status is User_Down)
-                    IF (Elevator MovingStatus is Elevator_Down AND above user floor AND  closer than an other one)
-                    Add elevator to is Elevator_queue
-                    ELSE IF (Elevator status is IDLE and closer than other)
-                        Add elevatore to is Elevator_queue
-                    ELSE 
-                        Dont go
-                    ENDIF
-                ENDIF
-            ENDIF
-        ENDFOR
-    ENDWHILE
-ENDSEQUENCE
-
-
-SEQUENCE Find_Elevator()              ' Choose Elevator
+SEQUENCE Find_Elevator()             ' Choose Elevator
     WHILE Elevator is Undefined
         FOR EACH elevator in Elevator_array                 ' chose the best elevator
-            IF (User status is User_up)                         ' Check if user go up if YES ..
-                IF (Elevator status is IDLE AND closer than other AND other elevator status is Moving)    ' Check if IDLE and near user
+            IF (CallButton Direction status is Up)                         ' Check if Callbutton go up if YES ..
+                IF (Elevator status is IDLE AND closer than other AND other elevator status is Moving)    ' Check if IDLE and near Callbutton
                     Add elevator to is Elevator_queue                                ' IF yes add
                 ELSE IF (Elevator status is Moving)                     ' Check if Moving if YES
-                    IF (Elevator MovingStatus is Elevator_UP)               ' Check if elevator go up if YES
+                    IF (Elevator Direction is Elevator_UP)               ' Check if elevator go up if YES
                         IF (Floor request is above elevator )                   ' Check if request is on the way
                             Add elevator to is Elevator_queue                                ' If YES add
                         ELSE IF (Floor request is under elevator)               ' If NO dont go
                             Dont go
                         ENDIF                                                
-                    ELSE IF (Elevator MovingStatus is Elevator_Down )       ' Check if elevator go down 
+                    ELSE IF (Elevator Direction is Elevator_Down )       ' Check if elevator go down 
                         Dont go                                              ' IF YES dont go
                     ENDIF
                 ENDIF
-            ELSE IF (User status is User_Down)                  ' Check if user go down if YES ...
-                IF (Elevator status is IDLE AND closer than other AND other elevator status is Moving)       ' Check if IDLE and near user
+            ELSE IF (CallButton Direction status is Down)                  ' Check if Callbuttonr go down if YES ...
+                IF (Elevator status is IDLE AND closer than other AND other elevator status is Moving)       ' Check if IDLE and near Callbutton
                     Add  to is Elevator_queue                            ' IF yes add
                 ELSE IF (Elevator status is Moving)                  ' Check if Moving if YES
-                    IF (Elevator MovingStatus is Elevator_UP)           ' Check if elevator go up 
+                    IF (Elevator Direction is Elevator_UP)           ' Check if elevator go up 
                         Dont go                                             ' If YES dont go
-                    ELSE IF (Elevator MovingStatus is Elevator_Down )   ' If YES Check if elevator go down
+                    ELSE IF (Elevator Direction is Elevator_Down )   ' If YES Check if elevator go down
                         IF (Floor request is under elevator )               ' If YES Check if request is on the way
                             Add to is Elevator_queue                            ' If yes add
                         ELSE IF (Floor request is above elevator)           ' If NO dont go
@@ -306,44 +329,6 @@ SEQUENCE Find_Elevator()              ' Choose Elevator
             ENDIF
         ENDFOR
     ENDWHILE
+    RETURN chosenElevator
 ENDSEQUENCE
 
-
-*****
-SEQUENCE Elevator_Move_Schema()
-
-    CALL SEQUENCE ShowTime(), 
-    CALL SEQUENCE display_Btn_Active(),
-    CALL SEQUENCE display_Active_Floor(),
-    CALL SEQUENCE Anti_Shenanigans()
-
-    
-        IF (elevator is at the same floor)
-            CALL SEQUENCE Open_and_Close_Doors()
-            IF (door is close) 
-                CALL Elevator_queue of user input
-            ENDIF
-        ELSE IF (elevator is higher than User Floor AND request go down)
-                IF (elevator is 2 floor away or more from requested floor)
-                    Travel full speed to destination
-                    CALL SEQUENCE SlowDownSafety() 
-                    CALL SEQUENCE DoubleSafetyStop()
-                ELSE
-                    travel normal speed to destination
-                    CALL SEQUENCE SlowDownSafety()
-                    CALL SEQUENCE DoubleSafetyStop()
-                ENDIF
-        ELSE IF (elevator is under than User Floor AND request go down)
-                IF elevator is 2 floor away or more from requested floor
-                    Travel full speed to destination
-                    CALL SEQUENCE SlowDownSafety()
-                    CALL SEQUENCE DoubleSafetyStop()
-                ELSE
-                    travel normal speed to destination
-                    CALL SEQUENCE SlowDownSafety()
-                    CALL SEQUENCE DoubleSafetyStop()
-                ENDIF
-            ENDIF
-        ENDIF
-    CALL SEQUENCE Initialize()
-ENDSEQUENCE
