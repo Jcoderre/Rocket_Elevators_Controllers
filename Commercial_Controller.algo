@@ -1,15 +1,31 @@
-/*
-*   This pseudo code is about the commercial elevator controllers.
-*   
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*
-*/
+"/*****************************************************************|
+*   This pseudo code is about the Commercial elevator controllers. |
+*                                                                  |
+*                       --MODERN STYLE--
+* _________________________________________________________________|
+*           it is based on the fact that we have :                 |
+*                                                                  |
+*                  - 4 column of 3 elevators,                      |
+*                  - 60 floors                                     |
+*                  - 6 basements                                   |
+*__________________________________________________________________|
+*           The facts that those object can be moved :             |
+*                                                                  |
+*                  - Column,                                       |
+*                  - Elevator,                                     |
+*                  - Call Button ( Outside the elevator ),         |
+*                  - Doors ( Elevator Doors ),                     |
+*                  - Elevator Button  ( inside the elevator ),     |
+*                  - Battery ,                                     |
+*                  - Floor Display                                 |
+*_________________________________________________________________ |
+*           Button that can be found outside the elevator :        |
+*                                                                  |
+*                  - Modern Terminal                               |
+*_________________________________________________________________ | 
+*                                                                  |
+*            PseudoCode written By : J.Coderre                     |
+*                 Date of creation : 2020-09-23                    |
+*                                                                  |
+******************************************************************/"
+
