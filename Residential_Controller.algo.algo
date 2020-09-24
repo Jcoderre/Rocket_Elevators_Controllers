@@ -124,9 +124,6 @@ DEFINE Elevator USING id
             SET Direction to  Elevator_Down                
     ENDSEQUENCE
 
-    
-    
-    
 ENDDEFINE
 
 
@@ -299,7 +296,7 @@ SEQUENCE Find_Elevator()             ' Choose Elevator
     WHILE Elevator is Undefined
         FOR EACH elevator in Elevator_array                 ' chose the best elevator
             IF (CallButton Direction status is Up)                         ' Check if Callbutton go up if YES ..
-                IF (Elevator status is IDLE AND closer than other AND other elevator status is Moving)    ' Check if IDLE and near Callbutton
+                IF (Elevator status is IDLE AND CurrentFloor is the closest AND other elevator status is Moving)    ' Check if IDLE and near Callbutton
                     Add elevator to is Elevator_queue                                ' IF yes add
                 ELSE IF (Elevator status is Moving)                     ' Check if Moving if YES
                     IF (Elevator Direction is Elevator_UP)               ' Check if elevator go up if YES
@@ -313,7 +310,7 @@ SEQUENCE Find_Elevator()             ' Choose Elevator
                     ENDIF
                 ENDIF
             ELSE IF (CallButton Direction status is Down)                  ' Check if Callbuttonr go down if YES ...
-                IF (Elevator status is IDLE AND closer than other AND other elevator status is Moving)       ' Check if IDLE and near Callbutton
+                IF (Elevator status is IDLE AND CurrentFloor is the closest AND other elevator status is Moving)       ' Check if IDLE and near Callbutton
                     Add  to is Elevator_queue                            ' IF yes add
                 ELSE IF (Elevator status is Moving)                  ' Check if Moving if YES
                     IF (Elevator Direction is Elevator_UP)           ' Check if elevator go up 
