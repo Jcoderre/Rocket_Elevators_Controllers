@@ -110,9 +110,12 @@ DEFINE Elevator USING id
     Direction : NULL                            ' Elevator_UP or Elevator_Down
     currentFloor: 1     
     doors : Close                               ' Close or Open
-    maxWeight: 
+    maxWeight:  2500
+    ActualWeight: 0
 
-     'Creating a moving sequence to the elevator'
+    CALL SEQUENCE ShowTime()
+
+    'Creating a moving sequence to the elevator'
 
     WHEN Elevator_queue is empty
         SET status to IDLE
@@ -145,6 +148,15 @@ DEFINE Elevator USING id
                 
         WHEN elevator_queue list go down
             SET Direction to  Elevator_Down                
+    ENDSEQUENCE
+
+    SEQUENCE Weight_Calculate
+        IF ActualWeight IS EQUAL OR HIGHER THAN (Maxweight - 100) 
+            DISPLAY in elevator display "LOADED!"
+        ELSE IF ActualWeight is HIGHER THAN maxWeight
+            SET status to Stopped 
+            SET door to open
+            DISPLAY in elevator display "OVERLOADED Please respect security protocol "
     ENDSEQUENCE
 
 ENDDEFINE
@@ -257,11 +269,11 @@ ENDSEQUENCE
 
 '/******************* Operative ***********************/
 
-SEQUENCE requestElevator USING  requestFloor         ' Request OUTSIDE elevator
+SEQUENCE request_Elevator USING  Floor         ' Request OUTSIDE elevator
     WHEN button_Up is pressed
         CALL SEQUENCE findColumn RETURNING column
         CALL SEQUENCE Find_Elevator OF column RETURNING elevator
-        ADD requestFloor TO Elevator_queue
+        ADD Floor TO Elevator_queue
         CALL move OF elevator      
         CALL SEQUENCE display_Btn_Active()
         CALL SEQUENCE display_Active_Floor() 
@@ -269,14 +281,14 @@ SEQUENCE requestElevator USING  requestFloor         ' Request OUTSIDE elevator
     WHEN button_Down is pressed
         CALL SEQUENCE findColumn RETURNING column
         CALL SEQUENCE Find_Elevator OF Column RETURNING elevator
-        ADD requestFloor TO Elevator_queue
+        ADD Floor TO Elevator_queue
         CALL move OF elevator
         CALL SEQUENCE display_Btn_Active()
         CALL SEQUENCE display_Active_Floor()
 ENDSEQUENCE
 
 
-SEQUENCE Find_Elevator()             ' Choose Elevator
+SEQUENCE Find_Elevator USING floor and direction             ' Choose Elevator
     WHILE Elevator is Undefined
         FOR EACH elevator in Elevator_array                 ' chose the best elevator
             IF (CallButton Direction status is Up)                         ' Check if Callbutton go up if YES ..
@@ -313,7 +325,7 @@ SEQUENCE Find_Elevator()             ' Choose Elevator
     RETURN chosenElevator
 ENDSEQUENCE
 
-SEQUENCE findColumn
+SEQUENCE findColumn USING floor
     IF callButtonList IS LOWER THAN 1
         RETURNING Column A
     ELSE IF callButtonList IS HIGHER THAN 1  AND  LOWER THAN 21
@@ -326,21 +338,21 @@ ENDSEQUENCE
 
 ------------------------------------------ TEST -----------------------------------------------
 'amountOfColumns  AND _FloorAmount AND amountOfElevatorPerColumn AND _batteryLowestFloor AND listOfFloorGroup
-SET battery1 to INSTANTIATE Battery WITH 4, 66, 3, -6, [(-6,1) (1, 20) (21, 40) (41, 60)]
+SET battery1 to INSTANTIATE Battery WITH 4, 66, 3, -6, [(-6,1) (1, 20) (21, 40 + 1) (41, 60 + 1)]
 
 
 
 'SCENARIO 1'
-CALL request_Floor of battery1 WITH 1, Up
+CALL request_Elevator of battery1 WITH 1, Up
 CALL request_Elevator  WITH 20
 'SCENARIO 2'
-CALL request_Floor of battery1 WITH 1, Up
+CALL request_Elevator of battery1 WITH 1, Up
 CALL request_Elevator WITH 36
 'SCENARIO 3'
-CALL request_Floor of battery1 WITH 54, Down
+CALL request_Elevator of battery1 WITH 54, Down
 CALL request_Elevator WITH 1
 'SCENARIO 4'
-CALL request_Floor of battery1 WITH -3, up
+CALL request_Elevator of battery1 WITH -3, up
 CALL request_Elevator WITH 1
 
 --------------------------------------------------END test--------------------------------------------

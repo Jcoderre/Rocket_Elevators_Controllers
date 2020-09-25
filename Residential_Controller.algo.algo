@@ -88,7 +88,11 @@ DEFINE Elevator USING id
     Direction : NULL                              ' Elevator_UP or Elevator_Down
     currentFloor: 1     
     doors : Close                                 ' Close or Open
+    MaxWeight: 2500
+    ActualWeight: 0
     
+    CALL SEQUENCE ShowTime()
+
     'Creating a moving sequence to the elevator'
 
     WHEN Elevator_queue is empty
@@ -122,6 +126,16 @@ DEFINE Elevator USING id
                 
         WHEN elevator_queue list go down
             SET Direction to  Elevator_Down                
+    ENDSEQUENCE
+
+    SEQUENCE Weight_Calculate
+        IF ActualWeight IS EQUAL OR HIGHER THAN (Maxweight - 100) 
+            DISPLAY in elevator display "LOADED!"
+        ELSE IF ActualWeight is HIGHER THAN maxWeight
+            SET status to Stopped 
+            SET door to open
+            DISPLAY in elevator display "OVERLOADED Please respect security protocol "
+
     ENDSEQUENCE
 
 ENDDEFINE
@@ -257,7 +271,7 @@ SEQUENCE request_Floor USING  floor and direction         ' Request OUTSIDE elev
         CALL SEQUENCE display_Active_Floor()
 ENDSEQUENCE
 
-SEQUENCE request_Elevator USING floor         ' Request INSIDE Elevator
+SEQUENCE request_Elevator USING floor AND direction        ' Request INSIDE Elevator
     WHEN Button_Is_Press
         ADD floor to requestButtonList
         CALL move OF elevator
@@ -266,9 +280,9 @@ SEQUENCE request_Elevator USING floor         ' Request INSIDE Elevator
         CALL SEQUENCE display_Active_Floor()
 ENDSEQUENCE
 
-SEQUENCE Find_Elevator()             ' Choose Elevator
+SEQUENCE Find_Elevator USING floor AND direction                 ' Choose Elevator
     WHILE Elevator is Undefined
-        FOR EACH elevator in Elevator_array                 ' chose the best elevator
+        FOR EACH elevator in Elevator_array                              ' chose the best elevator
             IF (CallButton Direction status is Up)                         ' Check if Callbutton go up if YES ..
                 IF (Elevator status is IDLE AND CurrentFloor is the closest AND other elevator status is Moving)    ' Check if IDLE and near Callbutton
                     Add elevator to is Elevator_queue                                ' IF yes add
