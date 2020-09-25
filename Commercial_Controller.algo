@@ -29,6 +29,13 @@
 *                                                                  |
 ******************************************************************/"
 
+SET Date_Now to today date and actual hour      '  var Date_Now = new Date().getTime()
+SET Time_now to the Date_now actual hour        '  var Time_Now = Date_Now.getHours() 
+
+SET listOfFloorGroup = []
+
+
+
 DEFINE battery USING amountOfColumns AND _FloorAmount AND amountOfElevatorPerColumn AND _batteryLowestFloor AND listOfFloorGroup
     columnList: empty List
     callButtonList: empty List
@@ -113,7 +120,7 @@ DEFINE Elevator USING id
     maxWeight:  2500
     ActualWeight: 0
 
-    CALL SEQUENCE ShowTime()
+    
 
     'Creating a moving sequence to the elevator'
 
@@ -122,6 +129,16 @@ DEFINE Elevator USING id
 
     WHEN Elevator_queue is not empty
         SET status to MOVING
+
+    SEQUENCE Temporal_Awareness()
+        IF (Time_Now EQUAL OR is HIGHER THAN 7  AND  EQUAL AND LOWER THAN 9)
+            IF (Elevators status IDLE for 10 minutes)
+                SET CurrentFloor to 1
+            ELSE
+                CALL SEQUENCE Initialize()
+            ENDIF
+        ENDIF
+    ENDSEQUENCE
 
     SEQUENCE move
         WHILE elevator status is MOVING
@@ -150,14 +167,27 @@ DEFINE Elevator USING id
             SET Direction to  Elevator_Down                
     ENDSEQUENCE
 
-    SEQUENCE Weight_Calculate
-        IF ActualWeight IS EQUAL OR HIGHER THAN (Maxweight - 100) 
-            DISPLAY in elevator display "LOADED!"
-        ELSE IF ActualWeight is HIGHER THAN maxWeight
-            SET status to Stopped 
-            SET door to open
-            DISPLAY in elevator display "OVERLOADED Please respect security protocol "
+    SEQUENCE Weight_Calculate()
+        WHILE elevator status IS NOT offline
+            SET ActualWeight
+            IF ActualWeight IS EQUAL OR HIGHER THAN (Maxweight - 100) 
+                DISPLAY in elevator display "LOADED!"
+            ELSE IF ActualWeight is HIGHER THAN maxWeight
+                SET status to Stopped 
+                SET door to open
+                DISPLAY in elevator display "OVERLOADED Please respect security protocol "
+            ENDIF
+        ENDWHILE
     ENDSEQUENCE
+
+    SEQUENCE CheckRC USING Elevator_queue
+
+    ENDSEQUENCE
+
+    CALL SEQUENCE Weight_Calculate()
+    CALL SEQUENCE ShowTime()
+    CALL SEQUENCE Temporal_Awareness()
+
 
 ENDDEFINE
 
@@ -176,7 +206,7 @@ ENDDEFINE
 '/****************   Display SEQUENCEs   **********************/
 
 SEQUENCE ShowTime()                  ' Show Actual Time
-    DISPLAY time in elevator ' Display time_Now
+    DISPLAY Date_Now in elevator            ' Display Date_Now
 ENDSEQUENCE
 
 SEQUENCE display_Btn_Active()        ' Display Light when input is activate
@@ -216,6 +246,7 @@ SEQUENCE Initialize()                ' Go back to Floor 1 if IDLE for to long
         ENDIF
     ENDIF
 ENDSEQUENCE 
+
 
 SEQUENCE Open_and_Close_Doors()      ' Open and close door
     open door
@@ -270,7 +301,7 @@ ENDSEQUENCE
 '/******************* Operative ***********************/
 
 SEQUENCE request_Elevator USING  Floor         ' Request OUTSIDE elevator
-    WHEN button_Up is pressed
+    WHEN buttonIsPressed is pressed
         CALL SEQUENCE findColumn RETURNING column
         CALL SEQUENCE Find_Elevator OF column RETURNING elevator
         ADD Floor TO Elevator_queue
@@ -278,22 +309,19 @@ SEQUENCE request_Elevator USING  Floor         ' Request OUTSIDE elevator
         CALL SEQUENCE display_Btn_Active()
         CALL SEQUENCE display_Active_Floor() 
 
-    WHEN button_Down is pressed
-        CALL SEQUENCE findColumn RETURNING column
-        CALL SEQUENCE Find_Elevator OF Column RETURNING elevator
-        ADD Floor TO Elevator_queue
-        CALL move OF elevator
-        CALL SEQUENCE display_Btn_Active()
-        CALL SEQUENCE display_Active_Floor()
 ENDSEQUENCE
 
 
-SEQUENCE Find_Elevator USING floor and direction             ' Choose Elevator
+SEQUENCE Find_Elevator USING floor and direction                           ' Choose Elevator
     WHILE Elevator is Undefined
-        FOR EACH elevator in Elevator_array                 ' chose the best elevator
+        FOR EACH elevator in Elevator_array                                ' chose the best elevator
             IF (CallButton Direction status is Up)                         ' Check if Callbutton go up if YES ..
-                IF (Elevator status is IDLE AND CurrentFloor is the closest AND other elevator status is Moving)    ' Check if IDLE and near Callbutton
-                    Add elevator to is Elevator_queue                                ' IF yes add
+                IF (Elevator status is IDLE AND CurrentFloor is the closest )    ' Check if IDLE and near Callbutton
+                    IF (AN Elevator status is Moving AND is Elevator_queue IS NOT EQUAL 1)    ' IF an elevator is moving and is not going to RC
+                        Add elevator to is Elevator_queue                                ' IF yes add
+                    ELSE IF (AN Elevator status is Moving AND is Elevator_queue EQUAL 1)
+                        Dont go
+                    ENDIF
                 ELSE IF (Elevator status is Moving)                     ' Check if Moving if YES
                     IF (Elevator Direction is Elevator_UP)               ' Check if elevator go up if YES
                         IF (Floor request is above elevator )                   ' Check if request is on the way
@@ -301,16 +329,28 @@ SEQUENCE Find_Elevator USING floor and direction             ' Choose Elevator
                         ELSE IF (Floor request is under elevator)               ' If NO dont go
                             Dont go
                         ENDIF                                                
-                    ELSE IF (Elevator Direction is Elevator_Down )       ' Check if elevator go down 
-                        Dont go                                              ' IF YES dont go
+                    ELSE IF (Elevator Direction is Elevator_Down AND  Value of Elevator_queue EQUAL 1)       ' Check if elevator go down 
+                        IF (Value of Elevator_queue EQUAL 1)
+                            Add elevator to is Elevator_queue                                             ' If yes add
+                        ELSE IF (Value of Elevator_queue IS NOT EQUAL 1)
+                            Dont Go
+                        ENDIF
                     ENDIF
                 ENDIF
             ELSE IF (CallButton Direction status is Down)                  ' Check if Callbuttonr go down if YES ...
-                IF (Elevator status is IDLE AND CurrentFloor is the closest AND other elevator status is Moving)       ' Check if IDLE and near Callbutton
-                    Add  to is Elevator_queue                            ' IF yes add
+                IF (Elevator status is IDLE AND CurrentFloor is the closest)       ' Check if IDLE and near Callbutton
+                    IF (AN Elevator status is Moving AND is Elevator_queue IS NOT EQUAL 1)
+                        Add elevator to is Elevator_queue                                ' IF yes add
+                    ELSE IF (AN Elevator status is Moving AND is Elevator_queue EQUAL 1)
+                        Dont go
+                    ENDIF                           
                 ELSE IF (Elevator status is Moving)                  ' Check if Moving if YES
-                    IF (Elevator Direction is Elevator_UP)           ' Check if elevator go up 
-                        Dont go                                             ' If YES dont go
+                    IF (Elevator Direction is Elevator_UP AND  Value of Elevator_queue EQUAL 1)           ' Check if elevator go up 
+                        IF (Value of Elevator_queue EQUAL 1)
+                            Add elevator to is Elevator_queue                                               ' If YES add
+                        ELSE IF (Value of Elevator_queue IS NOT EQUAL to 1)
+                            Dont go
+                        ENDIF
                     ELSE IF (Elevator Direction is Elevator_Down )   ' If YES Check if elevator go down
                         IF (Floor request is under elevator )               ' If YES Check if request is on the way
                             Add to is Elevator_queue                            ' If yes add
@@ -334,24 +374,24 @@ SEQUENCE findColumn USING floor
         RETURNING Column C
     ELSE IF callButtonList IS HIGHER THAN 40
         RETURNING Column D
-ENDSEQUENCE
+ENDSEQUENCE  
 
 ------------------------------------------ TEST -----------------------------------------------
 'amountOfColumns  AND _FloorAmount AND amountOfElevatorPerColumn AND _batteryLowestFloor AND listOfFloorGroup
-SET battery1 to INSTANTIATE Battery WITH 4, 66, 3, -6, [(-6,1) (1, 20) (21, 40 + 1) (41, 60 + 1)]
+SET battery1 to INSTANTIATE Battery WITH 4, 66, 5, -6, [(-6,1) (1, 20) (1 + (21, 40 )) (1+ (41, 60 ))]
 
 
 
-'SCENARIO 1'
+'SCENARIO 1'--PASS--
 CALL request_Elevator of battery1 WITH 1, Up
 CALL request_Elevator  WITH 20
-'SCENARIO 2'
+'SCENARIO 2'--PASS--
 CALL request_Elevator of battery1 WITH 1, Up
 CALL request_Elevator WITH 36
-'SCENARIO 3'
+'SCENARIO 3'--PASS--
 CALL request_Elevator of battery1 WITH 54, Down
 CALL request_Elevator WITH 1
-'SCENARIO 4'
+'SCENARIO 4'--PASS--
 CALL request_Elevator of battery1 WITH -3, up
 CALL request_Elevator WITH 1
 

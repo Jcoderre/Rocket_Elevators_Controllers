@@ -35,7 +35,7 @@
 START
 
 ' var time_Now = new Date().getTime();
-INPUT time_Now = GET current time 
+ SET Time_Now to today date and actual hour  'new Date().getTime()
 
 
 '/****************   Object ********************/
@@ -84,7 +84,7 @@ DEFINE Elevator USING id
     ID: id
     Elevator_queue to empty List
     requestButtonList: empty LIST
-    status to IDLE                               ' MOVING or IDLE 
+    status to IDLE                               ' MOVING or IDLE, stopped, maintance, offline
     Direction : NULL                              ' Elevator_UP or Elevator_Down
     currentFloor: 1     
     doors : Close                                 ' Close or Open
@@ -129,13 +129,16 @@ DEFINE Elevator USING id
     ENDSEQUENCE
 
     SEQUENCE Weight_Calculate
-        IF ActualWeight IS EQUAL OR HIGHER THAN (Maxweight - 100) 
-            DISPLAY in elevator display "LOADED!"
-        ELSE IF ActualWeight is HIGHER THAN maxWeight
-            SET status to Stopped 
-            SET door to open
-            DISPLAY in elevator display "OVERLOADED Please respect security protocol "
-
+        WHILE elevator status IS NOT offline
+            SET ActualWeight
+            IF ActualWeight IS EQUAL OR HIGHER THAN (Maxweight - 100) 
+                DISPLAY in elevator display "LOADED!"
+            ELSE IF ActualWeight is HIGHER THAN maxWeight
+                SET status to Stopped 
+                SET door to open
+                DISPLAY in elevator display "OVERLOADED Please respect security protocol "
+            ENDIF
+        ENDWHILE
     ENDSEQUENCE
 
 ENDDEFINE
@@ -284,8 +287,10 @@ SEQUENCE Find_Elevator USING floor AND direction                 ' Choose Elevat
     WHILE Elevator is Undefined
         FOR EACH elevator in Elevator_array                              ' chose the best elevator
             IF (CallButton Direction status is Up)                         ' Check if Callbutton go up if YES ..
-                IF (Elevator status is IDLE AND CurrentFloor is the closest AND other elevator status is Moving)    ' Check if IDLE and near Callbutton
-                    Add elevator to is Elevator_queue                                ' IF yes add
+                IF (Elevator status is IDLE AND other elevator status is Moving)    ' Check if IDLE and near Callbutton
+                    IF (CurrentFloor is the closest)
+                        Add elevator to is Elevator_queue                                   ' IF yes add
+                    ENDIF
                 ELSE IF (Elevator status is Moving)                     ' Check if Moving if YES
                     IF (Elevator Direction is Elevator_UP)               ' Check if elevator go up if YES
                         IF (Floor request is above elevator )                   ' Check if request is on the way
@@ -298,8 +303,12 @@ SEQUENCE Find_Elevator USING floor AND direction                 ' Choose Elevat
                     ENDIF
                 ENDIF
             ELSE IF (CallButton Direction status is Down)                  ' Check if Callbuttonr go down if YES ...
-                IF (Elevator status is IDLE AND CurrentFloor is the closest AND other elevator status is Moving)       ' Check if IDLE and near Callbutton
-                    Add  to is Elevator_queue                            ' IF yes add
+                IF (Elevator status is IDLE AND other elevator status is Moving)       ' Check if IDLE and near Callbutton
+                    IF (CurrentFloor is the closest)
+                        Add  to is Elevator_queue                            ' IF yes add
+                    ELSE 
+                        Dont go
+                    ENDIF    
                 ELSE IF (Elevator status is Moving)                  ' Check if Moving if YES
                     IF (Elevator Direction is Elevator_UP)           ' Check if elevator go up 
                         Dont go                                             ' If YES dont go
@@ -322,8 +331,8 @@ ENDSEQUENCE
 SET Column1 to INSTANTIATE Column WITH 1, 1, 10, 2
 
 'SCENARIO 1'
-CALL request_Floor WITH 3, Up
-CALL request_Elevator WITH 7
+CALL request_Floor WITH 3, Up      ELEVATOR A IDLE FLOOR 2  || ELEVATOR B IDLE Floor 6
+CALL request_Elevator WITH 7    
 'SCENARIO 2'
 CALL request_Floor WITH 1, Up
 CALL request_Elevator WITH 6
@@ -334,7 +343,7 @@ CALL request_Elevator WITH 5
 CALL request_Floor WITH 9, Down
 CALL request_Elevator WITH 2
 'SCENARIO 3'
-CALL request_Floor WITH 3, Down
+CALL request_Floor WITH 3, Down         ELEVATOR A IDLE F10 ||
 CALL request_Elevator WITH 2
 
 CALL request_Floor WITH 10, Down
