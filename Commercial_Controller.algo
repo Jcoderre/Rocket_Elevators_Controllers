@@ -32,8 +32,6 @@
 SET Date_Now to today date and actual hour      '  var Date_Now = new Date().getTime()
 SET Time_now to the Date_now actual hour        '  var Time_Now = Date_Now.getHours() 
 
-SET listOfFloorGroup = []
-
 
 
 DEFINE battery USING amountOfColumns AND _FloorAmount AND amountOfElevatorPerColumn AND _batteryLowestFloor AND listOfFloorGroup
