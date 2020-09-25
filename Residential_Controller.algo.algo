@@ -138,32 +138,6 @@ DEFINE CallButton USING _direction AND _floor
         SET Direction status to Down
 ENDDEFINE
 
---------------------------------------------------- TEST ------------------------------------------
-
-SET Column1 to INSTANTIATE Column WITH 1, 1, 10, 2
-SET elevator1 to INSTANTIATE Elevator WITH 1
-SET elevator2 to INSTANTIATE Elevator WITH 2
-
-'SCENARIO 1'
-CALL request_Floor WITH 3, Up
-CALL request_Elevator WITH 7
-'SCENARIO 2'
-CALL request_Floor WITH 1, Up
-CALL request_Elevator WITH 6
-
-CALL request_Floor WITH 3, Up
-CALL request_Elevator WITH 5
-
-CALL request_Floor WITH 9, Down
-CALL request_Elevator WITH 2
-'SCENARIO 3'
-CALL request_Floor WITH 3, Down
-CALL request_Elevator WITH 2
-
-CALL request_Floor WITH 10, Down
-CALL request_Elevator WITH 3
-
---------------------------------------------------END test--------------------------------------------
 
 '/****************   Display SEQUENCEs   **********************/
 
@@ -329,3 +303,27 @@ SEQUENCE Find_Elevator()             ' Choose Elevator
     RETURN chosenElevator
 ENDSEQUENCE
 
+--------------------------------------------------- TEST ------------------------------------------
+
+SET Column1 to INSTANTIATE Column WITH 1, 1, 10, 2
+
+'SCENARIO 1'
+CALL request_Floor WITH 3, Up
+CALL request_Elevator WITH 7
+'SCENARIO 2'
+CALL request_Floor WITH 1, Up
+CALL request_Elevator WITH 6
+
+CALL request_Floor WITH 3, Up
+CALL request_Elevator WITH 5
+
+CALL request_Floor WITH 9, Down
+CALL request_Elevator WITH 2
+'SCENARIO 3'
+CALL request_Floor WITH 3, Down
+CALL request_Elevator WITH 2
+
+CALL request_Floor WITH 10, Down
+CALL request_Elevator WITH 3
+
+--------------------------------------------------END test--------------------------------------------
