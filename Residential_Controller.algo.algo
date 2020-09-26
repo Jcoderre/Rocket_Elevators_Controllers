@@ -41,7 +41,7 @@ START
 '/****************   Object ********************/
 
 
-DEFINE Column USING _id AND minFloor AND maxFloor AND elevator_amount 
+DEFINE Column USING _id AND minFloor AND maxFloor AND elevator_amount       'Define our Column
     ID: id    
     minimumFloor: minFloor
     maximumFloor: maxFloor
@@ -55,17 +55,17 @@ DEFINE Column USING _id AND minFloor AND maxFloor AND elevator_amount
     CALL createCallButtons WITH amountOfFloor
    
     SEQUENCE createElevator USING elevator_amount
-        SET iterator TO 1
-        For elevator_amount           
+        SET iterator TO 1                                                    ' Create a For loop to create the 
+        For elevator_amount                                                  ' Right amount of elevator 
             SET newElevator TO INSTANTIATE Elevator with iterator
             ADD newElevator TO ElevatorList
             INCREMENT iterator BY 1
         ENDFOR
      ENDSEQUENCE
 
-     SEQUENCE createCallButtons USING amountOfFloor
-        SET iterator TO minimumFloor
-        FOR amountOfFloor
+     SEQUENCE createCallButtons USING amountOfFloor                                     ' Create a For loop
+        SET iterator TO minimumFloor                                                    ' to create the right 
+        FOR amountOfFloor                                                               ' amount of button
             IF iterator NOT EQUALS TO maximumFloor
                 SET newCallButtonUp TO INSTANTIATE CallButton WITH up AND iterator
                 ADD newCallButtonUp TO callButtonsList
@@ -80,13 +80,13 @@ DEFINE Column USING _id AND minFloor AND maxFloor AND elevator_amount
 
 ENDDEFINE
 
-DEFINE Elevator USING id
+DEFINE Elevator USING id        'Define our Elevator'
     ID: id
     Elevator_queue to empty List
     requestButtonList: empty LIST
     status to IDLE                               ' MOVING or IDLE, stopped, maintance, offline
     Direction : NULL                              ' Elevator_UP or Elevator_Down
-    currentFloor: 1     
+    currentFloor: 1                                 
     doors : Close                                 ' Close or Open
     MaxWeight: 2500
     ActualWeight: 0
@@ -208,6 +208,7 @@ SEQUENCE Open_and_Close_Doors()      ' Open and close door
             set countdown to 3 seconds
         ELSE IF (Countdown reach 0)
             start SEQUENCE DoorCloseFailSafe()
+        ENDIF
     ENDIF
 ENDSEQUENCE
 
@@ -260,7 +261,7 @@ ENDSEQUENCE
 
 SEQUENCE request_Floor USING  floor and direction         ' Request OUTSIDE elevator
     WHEN button_Up is pressed
-        CALL SEQUENCE Find_Elevator() RETURNING elevator
+        CALL SEQUENCE Find_Elevator() RETURNING elevator            
         ADD floor TO Elevator_queue
         CALL move OF elevator      
         CALL SEQUENCE display_Btn_Active()
@@ -283,39 +284,39 @@ SEQUENCE request_Elevator USING floor AND direction        ' Request INSIDE Elev
         CALL SEQUENCE display_Active_Floor()
 ENDSEQUENCE
 
-SEQUENCE Find_Elevator USING floor AND direction                 ' Choose Elevator
+SEQUENCE Find_Elevator USING floor AND direction                                    ' Choose Elevator
     WHILE Elevator is Undefined
-        FOR EACH elevator in Elevator_array                              ' chose the best elevator
-            IF (CallButton Direction status is Up)                         ' Check if Callbutton go up if YES ..
+        FOR EACH elevator in Elevator_array                                         ' chose the best elevator
+            IF (CallButton Direction status is Up)                                  ' Check if Callbutton go up if YES ..
                 IF (Elevator status is IDLE AND other elevator status is Moving)    ' Check if IDLE and near Callbutton
                     IF (CurrentFloor is the closest)
-                        Add elevator to is Elevator_queue                                   ' IF yes add
+                        Add elevator to is Elevator_queue                           ' IF yes add
                     ENDIF
-                ELSE IF (Elevator status is Moving)                     ' Check if Moving if YES
-                    IF (Elevator Direction is Elevator_UP)               ' Check if elevator go up if YES
-                        IF (Floor request is above elevator )                   ' Check if request is on the way
-                            Add elevator to is Elevator_queue                                ' If YES add
-                        ELSE IF (Floor request is under elevator)               ' If NO dont go
+                ELSE IF (Elevator status is Moving)                                 ' Check if Moving if YES
+                    IF (Elevator Direction is Elevator_UP)                          ' Check if elevator go up if YES
+                        IF (Floor request is above elevator )                       ' Check if request is on the way
+                            Add elevator to is Elevator_queue                       ' If YES add
+                        ELSE IF (Floor request is under elevator)                   ' If NO dont go
                             Dont go
                         ENDIF                                                
-                    ELSE IF (Elevator Direction is Elevator_Down )       ' Check if elevator go down 
-                        Dont go                                              ' IF YES dont go
+                    ELSE IF (Elevator Direction is Elevator_Down )                  ' Check if elevator go down 
+                        Dont go                                                     ' IF YES dont go
                     ENDIF
                 ENDIF
-            ELSE IF (CallButton Direction status is Down)                  ' Check if Callbuttonr go down if YES ...
-                IF (Elevator status is IDLE AND other elevator status is Moving)       ' Check if IDLE and near Callbutton
+            ELSE IF (CallButton Direction status is Down)                           ' Check if Callbuttonr go down if YES ...
+                IF (Elevator status is IDLE AND other elevator status is Moving)    ' Check if IDLE and near Callbutton
                     IF (CurrentFloor is the closest)
-                        Add  to is Elevator_queue                            ' IF yes add
+                        Add  to is Elevator_queue                                   ' IF yes add
                     ELSE 
                         Dont go
                     ENDIF    
-                ELSE IF (Elevator status is Moving)                  ' Check if Moving if YES
-                    IF (Elevator Direction is Elevator_UP)           ' Check if elevator go up 
-                        Dont go                                             ' If YES dont go
-                    ELSE IF (Elevator Direction is Elevator_Down )   ' If YES Check if elevator go down
-                        IF (Floor request is under elevator )               ' If YES Check if request is on the way
-                            Add to is Elevator_queue                            ' If yes add
-                        ELSE IF (Floor request is above elevator)           ' If NO dont go
+                ELSE IF (Elevator status is Moving)                                 ' Check if Moving if YES
+                    IF (Elevator Direction is Elevator_UP)                          ' Check if elevator go up 
+                        Dont go                                                     ' If YES dont go
+                    ELSE IF (Elevator Direction is Elevator_Down )                  ' If YES Check if elevator go down
+                    IF (Floor request is under elevator )                           ' If YES Check if request is on the way
+                            Add to is Elevator_queue                                ' If yes add
+                        ELSE IF (Floor request is above elevator)                   ' If NO dont go
                             Dont go 
                         ENDIF                                                    
                     ENDIF
@@ -323,7 +324,7 @@ SEQUENCE Find_Elevator USING floor AND direction                 ' Choose Elevat
             ENDIF
         ENDFOR
     ENDWHILE
-    RETURN chosenElevator
+    RETURN chosenElevator                                                           ' Return the right elevator
 ENDSEQUENCE
 
 --------------------------------------------------- TEST ------------------------------------------

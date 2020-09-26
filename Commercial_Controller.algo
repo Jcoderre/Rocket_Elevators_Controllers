@@ -129,9 +129,9 @@ DEFINE Elevator USING id
         SET status to MOVING
 
     SEQUENCE Temporal_Awareness()
-        IF (Time_Now EQUAL OR is HIGHER THAN 7  AND  EQUAL AND LOWER THAN 9)
-            IF (Elevators status IDLE for 10 minutes)
-                SET CurrentFloor to 1
+        IF (Time_Now EQUAL OR is HIGHER THAN 7  AND  EQUAL AND LOWER THAN 9)                ' When elevator IDLE for 10 minutes
+            IF (Elevators status IDLE for 10 minutes)                                       ' Inside hour span of 7 am to 9 am 
+                SET CurrentFloor to 1                                                       ' return the CurrentFloor to 1
             ELSE
                 CALL SEQUENCE Initialize()
             ENDIF
@@ -176,10 +176,6 @@ DEFINE Elevator USING id
                 DISPLAY in elevator display "OVERLOADED Please respect security protocol "
             ENDIF
         ENDWHILE
-    ENDSEQUENCE
-
-    SEQUENCE CheckRC USING Elevator_queue
-
     ENDSEQUENCE
 
     CALL SEQUENCE Weight_Calculate()
@@ -298,7 +294,7 @@ ENDSEQUENCE
 
 '/******************* Operative ***********************/
 
-SEQUENCE request_Elevator USING  Floor         ' Request OUTSIDE elevator
+SEQUENCE request_Elevator USING  Floor                                     ' Request OUTSIDE elevator
     WHEN buttonIsPressed is pressed
         CALL SEQUENCE findColumn RETURNING column
         CALL SEQUENCE Find_Elevator OF column RETURNING elevator
@@ -363,7 +359,7 @@ SEQUENCE Find_Elevator USING floor and direction                           ' Cho
     RETURN chosenElevator
 ENDSEQUENCE
 
-SEQUENCE findColumn USING floor
+SEQUENCE findColumn USING floor                                             ' Choose de right elevator to use for a specific floor
     IF callButtonList IS LOWER THAN 1
         RETURNING Column A
     ELSE IF callButtonList IS HIGHER THAN 1  AND  LOWER THAN 21
