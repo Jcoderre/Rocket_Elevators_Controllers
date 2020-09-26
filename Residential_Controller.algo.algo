@@ -80,7 +80,7 @@ DEFINE Column USING _id AND minFloor AND maxFloor AND elevator_amount       'Def
 
 ENDDEFINE
 
-DEFINE Elevator USING id        'Define our Elevator'
+DEFINE Elevator USING id                          ' Define our Elevator'
     ID: id
     Elevator_queue to empty List
     requestButtonList: empty LIST
@@ -140,6 +140,8 @@ DEFINE Elevator USING id        'Define our Elevator'
             ENDIF
         ENDWHILE
     ENDSEQUENCE
+
+    CALL SEQUENCE Weight_Calculate()
 
 ENDDEFINE
 
