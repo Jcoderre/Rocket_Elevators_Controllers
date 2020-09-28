@@ -72,7 +72,7 @@ DEFINE Column USING _id AND minFloor AND maxFloor AND elevator_amount       'Def
             ENDIF
             IF iterator IS GREATER THAN minimumFloor
                 SET newCallButtonDown TO INSTANTIATE CallButton WITH down AND iterator                
-                ADD newCallButtonUp TO callButtonsList
+                ADD newCallButtonDown TO callButtonsList
             ENDIF
             INCREMENT iterator BY 1
         ENDFOR
