@@ -2,7 +2,95 @@
 ######### Residential ##########
 ################################
 import datetime
+import time
 
+now = datetime.datetime.now()
+User_response = None
+User_Destination = None
+User_Direction = None
+User_Actual_Floor = None
+
+######## COLUMN INTERFACE  #########
+
+print("Are you at the Ground floor ?")
+while User_response not in {"yes","yes", "Yes", "y", 'Y', "YES", "YEs", "yeS", "yES", "no", "No", "NO", "nO", "N", "n"}:
+      User_response = input("Please enter yes or no: ")
+      time.sleep(1)
+      if User_response in ("yes","yes", "Yes", "y", 'Y', "YES", "YEs", "yeS", "yES"):
+            print("Perfect !") 
+            print("An elevator is on the way") 
+            print("Have a wonderful day !")
+            User_Direction = 'Up'
+            User_Actual_Floor = "1"         
+      elif User_response in ("no", "No", "NO", "nO", "N", "n"):
+            print("Where are you ?")
+            while  User_Actual_Floor not in {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}: 
+                  User_Actual_Floor = input("Floor: ")
+                  if User_Actual_Floor == "1":
+                        print("Perfect !") 
+                        print("An elevator is on the way") 
+                        print("Have a wonderful day !")
+                        User_Direction = 'Up'
+                        User_Actual_Floor = "1"
+                  elif User_Actual_Floor == "10":
+                        print("Perfect !") 
+                        print("An elevator is on the way") 
+                        print("Have a wonderful day !")
+                        User_Direction = 'Down'
+                  elif User_Actual_Floor == "2" or "3" or "4" or "5" or "6" or "7" or "8" or "9":
+                        print("Which way are you going ?")
+                        while User_Direction not in {"Up", "UP", "uP", "up", "down", "Down", "DOwn", "DOWn", "DOWN", "dOWN", "doWN", "dowN"}:
+                              User_Direction = input("Down or Up: ")
+                              if User_Direction in ("Up", "UP", "uP", "up"):
+                                    print("Perfect !") 
+                                    print("An elevator is on the way") 
+                                    print("Have a wonderful day !")
+                                    User_Direction = 'Up'
+                              elif User_Direction in ("down", "Down", "DOwn", "DOWn", "DOWN", "dOWN", "doWN", "dowN"):
+                                    print("Perfect !") 
+                                    print("An elevator is on the way") 
+                                    print("Have a wonderful day !")
+                                    User_Direction = 'Down'
+                  else:
+                        print("Enter a valid answer")
+                        User_Destination = None
+
+################# END COLUMN INTERFACE  ################                        
+print(User_response)
+print(User_Destination)
+print(User_Direction)
+print(User_Actual_Floor)
+############### ELEVATOR INTERFACE #################
+
+time.sleep(2)
+print("Welcome in our elevator !")
+print ("Today we are : ")
+print (now.strftime("%A the %d of %B local time: %I:%M %p"))
+time.sleep(1)
+print("Actualy you are at floor " + User_Actual_Floor )
+print("Which floor are you heading ?")
+while User_Destination not in {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}:
+      User_Destination = input("Please select a floor: ")
+      if User_Destination == User_Actual_Floor:
+            print("You're already there !")
+            print("Please select a valid floor")
+            User_Destination = None
+            time.sleep(2)
+      elif User_Destination in ("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"):
+            if int(User_Destination) > int(User_Actual_Floor):
+                  User_Direction = 'Up'
+            elif int(User_Destination) < int(User_Actual_Floor):
+                  User_Direction = "Down"
+      else:
+            print("Enter a valid answer")
+            User_Destination = None
+
+############## END COLUMN INTERFACE #################
+
+print(User_response)
+print(User_Destination)
+print(User_Direction)
+print(User_Actual_Floor)
 
 class CallButton:
       def __init__(self, Direction, Floor):
