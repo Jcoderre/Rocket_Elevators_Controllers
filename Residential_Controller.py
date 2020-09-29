@@ -10,8 +10,96 @@ User_Destination = None
 User_Direction = None
 User_Actual_Floor = None
 
+
+
+class CallButton:
+      def __init__(self, User_Actual_Floor, User_Direction):
+            self.Direction = []
+            self.Floor = []
+
+class Elevator:
+      def __init__(self, id):
+            self.id = id
+            self.elevatorQueue = []         # Array of the Elevator Queue
+            self.requestButtonList = []     # Array of Requested Buttons
+            self.IsStatusIDLE = True        # Boolean ->  IDLE, Moving 
+            self.IsDirectionUp = bool       # Boolean ->  Up, Down
+            self.IsDoorsClose = True        # Bollean ->  Close or Open
+            self.currentFloor = 1           # Actual floor of the elevator          
+            self.Maxweight = 2500           # Maximum Weight
+            self.ActualWeight = 0           # Actual Weight
+
+            ## MOVE ##
+            if self.elevatorQueue == +1 :
+                  self.IsDirectionUp = True
+            if self.elevatorQueue == -1 :
+                  self.IsDirectionUp = not self.IsDirectionUp
+            ## END MOVE ##
+
+      ## ELEVATOR DOORS STATUS ##
+      def Open_Door(self):
+            self.IsDoorsClose = not self.IsDoorsClose
+
+      def Close_Door(self):
+            self.IsDoorsClose = True
+      ## END ELEVATOR DOORS STATUS ##
+
+      ## ELEVATOR STATUS ##
+      def IDLE_Status(self):
+            self.IsStatusIDLE = True 
+
+      def Moving_Status(self):
+            self.IsStatusIDLE = not self.IsStatusIDLE     
+      ## END ELEVATOR STATUS ##  
+         
+Elevator1 = Elevator(id)
+
+
+class Column: 
+       
+      def __init__(self, minFloor, maxFloor, Elevator_Amount):
+            self.id = id
+            self.minFloor = minFloor
+            self.maxFloor = maxFloor
+            self.Floor_Amount = minFloor - maxFloor
+            self.Elevator_Amount = Elevator_Amount
+            self.IsStatusIDLE = True          # IDLE, Moving
+            self.ElevatorList = []               
+            self.callButtonsList = []
+
+            ## FINDING THE GOOD AMOUNT OF ELEVATOR ##
+            for i in range(Elevator_Amount):
+                  elevator = Elevator(i)
+                  self.ElevatorList.append(elevator)
+            ## END FINDING THE GOOD AMOUT OF ELEVATOR ##
+
+            ## CREATING THE CALLING BUTTON FOR EACH FLOOR ##
+            for CallButton in range(self.minFloor, self.maxFloor + 1, 1):
+                  if CallButton != self.maxFloor:
+                        self.NewCallButtonUp = "Up" + str(CallButton)
+                        self.callButtonsList.append("NewCallButtonUp")
+                  if CallButton > self.minFloor:
+                        self.NewCallButtonDown = "Down" + str(CallButton)
+                        self.callButtonsList.append("NewCallButtonDown")
+            ## END CREATING CALLING BUTTON ##
+
+
+      def IDLE_Status(self):
+            self.IsStatusIDLE = True 
+
+      def Moving_Status(self):
+            self.IsStatusIDLE = False     
+
+
+Column1 = Column(1, 10, 2)
+print(Column1.ElevatorList)
+
+print(Column1.IsStatusIDLE)
+
+
 ######## COLUMN INTERFACE  #########
 
+print("Welcome !")
 print("Are you at the Ground floor ?")
 while User_response not in {"yes","yes", "Yes", "y", 'Y', "YES", "YEs", "yeS", "yES", "no", "No", "NO", "nO", "N", "n"}:
       User_response = input("Please enter yes or no: ")
@@ -53,145 +141,27 @@ while User_response not in {"yes","yes", "Yes", "y", 'Y', "YES", "YEs", "yeS", "
                                     User_Direction = 'Down'
                   else:
                         print("Enter a valid answer")
-                        User_Destination = None
+                        User_Direction = None
 
 ################# END COLUMN INTERFACE  ################                        
-print(User_response)
-print(User_Destination)
-print(User_Direction)
-print(User_Actual_Floor)
-############### ELEVATOR INTERFACE #################
 
-time.sleep(2)
-print("Welcome in our elevator !")
-print ("Today we are : ")
-print (now.strftime("%A the %d of %B local time: %I:%M %p"))
-time.sleep(1)
-print("Actualy you are at floor " + User_Actual_Floor )
-print("Which floor are you heading ?")
-while User_Destination not in {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}:
-      User_Destination = input("Please select a floor: ")
-      if User_Destination == User_Actual_Floor:
-            print("You're already there !")
-            print("Please select a valid floor")
-            User_Destination = None
-            time.sleep(2)
-      elif User_Destination in ("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"):
-            if int(User_Destination) > int(User_Actual_Floor):
-                  User_Direction = 'Up'
-            elif int(User_Destination) < int(User_Actual_Floor):
-                  User_Direction = "Down"
-      else:
-            print("Enter a valid answer")
-            User_Destination = None
-
-############## END COLUMN INTERFACE #################
-
-print(User_response)
-print(User_Destination)
 print(User_Direction)
 print(User_Actual_Floor)
 
-class CallButton:
-      def __init__(self, Direction, Floor):
-            self.Direction = []
-            self.Floor = []
 
-class Elevator:
-      def __init__(self, id):
-            self.id = id
-            self.elevatorQueue = []         # Array of the Elevator Queue
-            self.requestButtonList = []     # Array of Requested Buttons
-            self.IsStatusIDLE = True        # Boolean ->  IDLE, Moving 
-            self.IsDirectionUp = bool       # Boolean ->  Up, Down
-            self.IsDoorsClose = True        # Bollean ->  Close or Open
-            self.currentFloor = 1           # Actual floor of the elevator          
-            self.Maxweight = 2500           # Maximum Weight
-            self.ActualWeight = 0           # Actual Weight
-
-            ## MOVE ##
-            if self.elevatorQueue == +1 :
-                  self.IsDirectionUp = True
-            if self.elevatorQueue == -1 :
-                  self.IsDirectionUp = not self.IsDirectionUp
-            ## END MOVE ##
-
-      ## ELEVATOR DOORS STATUS ##
-      def Open_Door(self):
-            self.IsDoorsClose = not self.IsDoorsClose
-
-      def Close_Door(self):
-            self.IsDoorsClose = True
-      ## END ELEVATOR DOORS STATUS ##
-
-      ## ELEVATOR STATUS ##
-      def IDLE_Status(self):
-            self.IsStatusIDLE = True 
-
-      def Moving_Status(self):
-            self.IsStatusIDLE = not self.IsStatusIDLE     
-      ## END ELEVATOR STATUS ##     
-
-class Column: 
-       
-      def __init__(self, minFloor, maxFloor, Elevator_Amount):
-            self.id = id
-            self.minFloor = minFloor
-            self.maxFloor = maxFloor
-            self.Floor_Amount = minFloor - maxFloor
-            self.Elevator_Amount = Elevator_Amount
-            self.IsStatusIDLE = True          # IDLE, Moving
-            self.ElevatorList = []               
-            self.callButtonsList = []
-
-            ## FINDING THE GOOD AMOUNT OF ELEVATOR ##
-            for i in range(Elevator_Amount):
-                  elevator = Elevator(i)
-                  self.ElevatorList.append(elevator)
-            ## END FINDING THE GOOD AMOUT OF ELEVATOR ##
-
-            ## CREATING THE CALLING BUTTON FOR EACH FLOOR ##
-            for CallButton in range(self.minFloor, self.maxFloor + 1, 1):
-                  if CallButton != self.maxFloor:
-                        self.NewCallButtonUp = "Up" + str(CallButton)
-                        self.callButtonsList.append("NewCallButtonUp")
-                  if CallButton > self.minFloor:
-                        self.NewCallButtonDown = "Down" + str(CallButton)
-                        self.callButtonsList.append("NewCallButtonDown")
-            ## END CREATING CALLING BUTTON ##
-
-
-      def IDLE_Status(self):
-            self.IsStatusIDLE = True 
-
-      def Moving_Status(self):
-            self.IsStatusIDLE = False     
-
-
-Column1 = Column(1, 10, 2)
-Elevator1 = Elevator(id)
-
-## REQUEST ELEVATOR ##
-def request_Elevator(Floor, Direction):
-      Elevator1.elevatorQueue.append(Floor)
-      if Direction == "up" or "Up":
+############# REQUEST ELEVATOR ON COLUMN #########
+def request_Elevator(User_Actual_Floor, User_Direction):
+      Elevator1.elevatorQueue.append(User_Actual_Floor)
+      if User_Direction == "up" or "Up":
             Elevator1.IsDirectionUp = True
       else:
             Elevator1.IsDirectionUp = not Elevator1.IsDirectionUp
-## END REQUEST ELEVATOR ##
+############## END REQUEST ELEVATOR ###############
 
-## REQUEST FLOOR ##
-def  request_Floor(Floor, Direction):
-      Elevator1.requestButtonList.append(Floor)
-      if Direction == "up" or "Up":
-            Elevator1.IsDirectionUp = True
-      else:
-            Elevator1.IsDirectionUp = not Elevator1.IsDirectionUp
+print(Elevator1.elevatorQueue)
 
-## END REQUEST FLOOR ##
-
-## FIND THE BEST ELEVATOR ##
-def Best_Elevator(Floor, Direction):
+############## FIND THE BEST ELEVATOR #############
+def Best_Elevator(User_Actual_Floor , User_Direction):
       while Elevator1 == "undefined":
             for elevatorSelector in range(Column1.Elevator_Amount):
                   if Elevator1.IsDirectionUp == True:
@@ -224,8 +194,74 @@ def Best_Elevator(Floor, Direction):
                                           return elevatorSelector
                                     elif request_Floor > Elevator1.currentFloor:
                                           break                                 
-## END FIND THE BEST ELEVATOR ##      
-      
-request_Elevator(1, "down")
-request_Floor(4, "up")
-Best_Elevator(5, "down")
+############## END FIND THE BEST ELEVATOR #########   
+
+print(request_Elevator(User_Actual_Floor, User_Direction))
+print(Best_Elevator(User_Actual_Floor , User_Direction))
+
+############### ELEVATOR INTERFACE #################
+
+time.sleep(2)
+print("Welcome in our elevator !")
+print ("Today we are : ")
+print (now.strftime("%A the %d of %B local time: %I:%M %p"))
+time.sleep(1)
+print("Actualy you are at floor " + User_Actual_Floor )
+print("Which floor are you heading ?")
+while User_Destination not in {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}:
+      User_Destination = input("Please select a floor: ")
+      if User_Destination == User_Actual_Floor:
+            print("You're already there !")
+            print("Please select a valid floor")
+            User_Destination = None
+            time.sleep(2)
+      elif User_Destination in ("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"):
+            if int(User_Destination) > int(User_Actual_Floor):
+                  User_Direction = 'Up'
+            elif int(User_Destination) < int(User_Actual_Floor):
+                  User_Direction = "Down"
+      else:
+            print("Enter a valid answer")
+            User_Destination = None
+
+############## END COLUMN INTERFACE #################
+
+############## REQUEST FLOOR IN ELEVATOR ##########
+def  request_Floor(User_Destination, User_Direction):
+      Elevator1.requestButtonList.append(User_Destination)
+      if User_Direction == "up" or "Up":
+            Elevator1.IsDirectionUp = True
+      else:
+            Elevator1.IsDirectionUp = not Elevator1.IsDirectionUp
+############### END REQUEST FLOOR ##################
+
+print(request_Floor(User_Destination, User_Direction))
+
+
+Best_Elevator(User_Actual_Floor , User_Direction)
+"""      
+--------------------------------------------------- TEST ------------------------------------------
+
+SET Column1 to INSTANTIATE Column WITH 1, 1, 10, 2
+
+'SCENARIO 1'
+CALL request_Floor WITH 3, Up      ELEVATOR A IDLE FLOOR 2  || ELEVATOR B IDLE Floor 6
+CALL request_Elevator WITH 7    
+'SCENARIO 2'
+CALL request_Floor WITH 1, Up
+CALL request_Elevator WITH 6
+
+CALL request_Floor WITH 3, Up
+CALL request_Elevator WITH 5
+
+CALL request_Floor WITH 9, Down
+CALL request_Elevator WITH 2
+'SCENARIO 3'
+CALL request_Floor WITH 3, Down         ELEVATOR A IDLE F10 ||
+CALL request_Elevator WITH 2
+
+CALL request_Floor WITH 10, Down
+CALL request_Elevator WITH 3
+
+--------------------------------------------------END test--------------------------------------------
+"""
