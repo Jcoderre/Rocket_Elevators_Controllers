@@ -1,6 +1,6 @@
-################################
-######### Residential ##########
-################################
+##########################################################
+######### RESIDENTIAL CONTROLLER PYTHON VERSION ##########
+##########################################################
 import datetime
 import time
 
@@ -33,16 +33,11 @@ class Elevator:
             self.Maxweight = 2500           # Maximum Weight
             self.ActualWeight = 0           # Actual Weight
    
-
-      
-
 ######################### END CLASS ELEVATOR #################################
-
 
 ########################## Class Column ######################        
 class Column:   
       def __init__(self, minFloor, maxFloor, Elevator_Amount):
-            #self.id = id
             self.minFloor = minFloor
             self.maxFloor = maxFloor
             self.Floor_Amount = minFloor - maxFloor
@@ -141,7 +136,7 @@ class Column:
       ######################## END MOVE ################
   
       ############# REQUEST ELEVATOR  ##################
-      def request_Elevator(self, User_Actual_Floor, User_Direction):
+      def request_Elevator(self, User_Actual_Floor):
             self.chosenElevator.elevatorQueue.append(User_Actual_Floor)
             if int(User_Actual_Floor) > self.chosenElevator.currentFloor:
                   self.chosenElevator.IsDirectionUp = True
@@ -152,7 +147,7 @@ class Column:
       ############## END REQUEST ELEVATOR ############### 
 
       ############## REQUEST FLOOR IN ELEVATOR ##########
-      def  request_Floor(self, User_Direction):
+      def  request_Floor(self, User_Direction, User_Destination):
             self.chosenElevator.requestButtonList.append(User_Destination) 
             if User_Direction  == 'Up':
                   self.moveElevatorUp(User_Destination)
@@ -193,8 +188,8 @@ column1 = Column(1, 10, 2)          ### CREATING YOUR COLUMN
 #####################################################################
 ##### THOSE VALUES NEED TO BE CHANGE TO CREATE YOUR SEQUENCE !!!! ###
 #####################################################################
-column1.ElevatorList[0].currentFloor = 2        ## ENTER VALUES OF WHERE YOUR ELEVATOR ACTUALLY ARE
-column1.ElevatorList[1].currentFloor = 6
+column1.ElevatorList[0].currentFloor = 10        ## ENTER VALUES OF WHERE YOUR ELEVATOR ACTUALLY ARE
+column1.ElevatorList[1].currentFloor = 3
 column1.ElevatorList[1].IsStatusIDLE = True      ## OBVIOUS TRUE OR FALSE 
 #####################################################################
 
@@ -271,10 +266,13 @@ for i in actual_Floor_Of_Elevators:
             find_Best_Elevator = i
             best_Elevator_Choice = abs(i - int(User_Actual_Floor)) 
 
+
+
+
 ### CALLING YOUR FUNCTION TO LET THE ALGORITHME RUN #####
 
 column1.Best_Elevator(User_Actual_Floor , User_Direction, find_Best_Elevator)
-column1.request_Elevator(User_Actual_Floor, User_Direction)
+column1.request_Elevator(User_Actual_Floor)
 
 print("The chosen Elevator to send is elevator {}".format(column1.chosenElevator.id))
 
@@ -311,30 +309,28 @@ while User_Destination not in {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"
 
 ############# END COLUMN INTERFACE #################
 
-column1.request_Floor(User_Direction)
+column1.request_Floor(User_Direction, User_Destination)
 
 """      
 --------------------------------------------------- TEST ------------------------------------------
-
-SET column1 to INSTANTIATE Column WITH 1, 1, 10, 2
 
 'SCENARIO 1'
 CALL request_Floor WITH 3, Up      ELEVATOR A IDLE FLOOR 2  || ELEVATOR B IDLE Floor 6
 CALL request_Elevator WITH 7    
 'SCENARIO 2'
-CALL request_Floor WITH 1, Up      ELEVATOR A IDLE FLOOR 10   || ELEVATOR B IDLE FLOOR 3
+CALL request_Floor WITH 1, Up      ELEVATOR A IDLE FLOOR 10 || ELEVATOR B IDLE FLOOR 3
 CALL request_Elevator WITH 6
 
-CALL request_Floor WITH 3, Up      ELEVATOR A IDLE FLOOR 10  || ELEVATOR B IDLE FLOOR 6
+CALL request_Floor WITH 3, Up      ELEVATOR A IDLE FLOOR 10 || ELEVATOR B IDLE FLOOR 6
 CALL request_Elevator WITH 5
 
-CALL request_Floor WITH 9, Down     ELEVATOR A IDLE FLOOR 10  || ELEVATOR B MOVE TO FLOOR 5
+CALL request_Floor WITH 9, Down    ELEVATOR A IDLE FLOOR 10 || ELEVATOR B MOVE FLOOR 5
 CALL request_Elevator WITH 2
 'SCENARIO 3'
-CALL request_Floor WITH 3, Down         ELEVATOR A IDLE FLOOR 10 || ELEVATOR B MOVING TO FLOOR 6
+CALL request_Floor WITH 3, Down    ELEVATOR A IDLE FLOOR 10 || ELEVATOR B MOVE FLOOR 6
 CALL request_Elevator WITH 2
 
-CALL request_Floor WITH 10, Down          ELEVATOR A  IDLE FLOOR 2  || ELEVATOR IDLE FLOOR 6
+CALL request_Floor WITH 10, Down   ELEVATOR A  IDLE FLOOR 2 || ELEVATOR B IDLE FLOOR 6
 CALL request_Elevator WITH 3
 
 --------------------------------------------------END test--------------------------------------------
