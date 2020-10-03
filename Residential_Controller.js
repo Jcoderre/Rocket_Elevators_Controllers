@@ -15,13 +15,13 @@ function sleep(ms) {
 class callButton {
     constructor(User_Actual_Floor, User_Direction) {
         this.Direction = []
-        this.Floor = []   
+        this.Floor = []
     }
 }
 //################## END CLASS CALL BUTTON ##################################
 
 //#################### CLASS ELEVATOR #######################################
-class Elevator {    
+class Elevator {
     constructor(id) {
         this.id = id
         this.elevatorQueue = []         // Unordered set of floor request
@@ -29,7 +29,7 @@ class Elevator {
         this.IsStatusIDLE = true        // Boolean ->  IDLE, Moving 
         this.IsDirectionUp = Boolean       // Boolean ->  Up, Down
         this.IsDoorsClose = true        // Bollean ->  Close or Open
-        this.currentFloor = 1           // Actual floor of the elevator          
+        this.currentFloor = 1           // Actual floor of the elevator
         this.Maxweight = 2500           // Maximum Weight
         this.ActualWeight = 0           // Actual Weight
         this.User_response = null
@@ -38,7 +38,6 @@ class Elevator {
         this.User_Actual_Floor = 0
     }
 }
-      
 
 //######################### END CLASS ELEVATOR #################################
 
@@ -50,7 +49,7 @@ class Column {
         this.Floor_Amount = minFloor - maxFloor             // Calculate the good number of floor
         this.Elevator_Amount = Elevator_Amount              // Number of elevator needed
         this.IsStatusIDLE = true                            // IDLE, Moving
-        this.ElevatorList = []                              // An Elevator list        
+        this.ElevatorList = []                              // An Elevator list
         this.callButtonsList = []                           // A list of all call button (Up and down) on column
         this.chosenElevator = null                          // The best elevator that will be send to user
         this.User_response = ""
@@ -63,7 +62,7 @@ class Column {
         for (var i = 0; i < this.Elevator_Amount; i++) {
             var elevator = new Elevator(i + 1)
             this.ElevatorList.push(elevator)
-        }        
+        }
         //##### END FINDING THE GOOD AMOUT OF ELEVATOR ######
 
         //#### CREATING THE CALLING BUTTON FOR EACH FLOOR ###
@@ -75,7 +74,7 @@ class Column {
                 if (i > this.minFloor) {
                     this.NewCallButtonDown = "Down" + i
                     this.callButtonsList.push("NewCallButtonDown")
-                }    
+                }
             }
          //############## END CREATING CALLING BUTTON ########
     }
@@ -88,7 +87,7 @@ class Column {
                     if (bestScore > 1) {
                         this.chosenElevator = elevator
                         bestScore = 1
-                    }                                
+                    }
                 } else if (elevator.IsDirectionUp == false) {
                     if (bestScore > 8) {
                         this.chosenElevator = elevator
@@ -101,42 +100,42 @@ class Column {
                             bestScore = 2
                         }
                     } else if (find_Closest_Elevator == column1.ElevatorList[1].currentFloor) {
-                        if (bestScore > 2) {
+                        if (bestScore > 1) {
                             this.chosenElevator = elevator
-                            bestScore = 1 
-                        }     
-                    }            
-                }                
-            }                         
+                            bestScore = 2
+                        }
+                    }
+                }
+            }
             if (User_Direction == "Down") {
-                if (elevator.IsDirectionUp == false) {                   
+                if (elevator.IsDirectionUp == false) {
                     if (bestScore > 8) {
                         this.chosenElevator = elevator
                         bestScore = 8
-                    }    
+                    }
                 } else if (elevator.IsDirectionUp == true && User_Actual_Floor <= elevator.currentFloor) {
                     if (bestScore > 1) {
                         this.chosenElevator = elevator
                         bestScore = 1
-                    }    
+                    }
                 } else if (elevator.IsStatusIDLE == true) {
                     if (find_Closest_Elevator == column1.ElevatorList[0].currentFloor) {
                         if (bestScore > 2) {
                             this.chosenElevator = elevator
                             bestScore = 2
-                        }    
+                        }
                     } else if (find_Closest_Elevator == column1.ElevatorList[1].currentFloor) {
                         if (bestScore > 1) {
                             this.chosenElevator = elevator
                             bestScore = 2
-                        }          
-                    }            
-                }                
-            }                    
+                        }
+                    }
+                }
+            }
         }
-    }                            
-    //############## END FIND THE BEST ELEVATOR #########  
-    
+    }
+    //############## END FIND THE BEST ELEVATOR #########
+
     //################### MOVE ##########################
     moveUp(User_Actual_Floor) {
         while (parseInt(User_Actual_Floor) > this.chosenElevator.currentFloor) {
@@ -153,9 +152,9 @@ class Column {
                 console.log("Open Door")
                 sleep(1000);
                 doorOpening()
-                console.log("Close Door")            
+                console.log("Close Door")
                 doorClosing()
-            }    
+            }
         }
     }
     moveDown(User_Actual_Floor) {
@@ -174,9 +173,9 @@ class Column {
                 doorOpening()
                 console.log("Close Door")
                 doorClosing()
-            }    
-        }            
-    }                
+            }
+        }
+    }
     //######################## END MOVE ################
     
     //################## MOVE WHILE INSIDE ################
@@ -215,8 +214,8 @@ class Column {
                 doorOpening()
                 console.log("Close Door")
                 doorClosing()
-            }    
-        }        
+            }
+        }
     }
 
     //################## END WHILE INSIDE #################
@@ -231,24 +230,25 @@ class Column {
             this.chosenElevator.IsDirectionUp = false
             this.moveDown(User_Actual_Floor)
         }
-    }        
-    //############## END REQUEST ELEVATOR ############### 
+    }
+    //############## END REQUEST ELEVATOR ###############
 
     //############## REQUEST FLOOR of ELEVATOR ##########
     request_Floor(User_Direction, User_Destination) {
-        this.chosenElevator.requestButtonList.push(User_Destination) 
+        this.chosenElevator.requestButtonList.push(User_Destination)
         if (User_Direction  == 'Up') {
             this.moveElevatorUp(User_Destination)
         } else if (User_Direction == "Down") {
-            this.moveElevatorDown(User_Destination) 
-        }    
-    }        
+            this.moveElevatorDown(User_Destination)
+        }
+    }
     //############### END REQUEST FLOOR ##################
 
 } 
 //######################## END CLASS COLUMN #######################################
 
 column1 = new Column(1, 10, 2);
+
 var find_Closest_Elevator;
 
 //################ FUNCTION THAT START THE SCENARIO ######################
@@ -319,10 +319,7 @@ function sequence1() {
     column1.ElevatorList[1].currentFloor = 6
     column1.ElevatorList[1].IsStatusIDLE = true      // OBVIOUS TRUE OR FALSE 
     start()
-    column1.Best_Elevator(3 , "Up", find_Closest_Elevator)
-    column1.request_Elevator(3)
-    column1.request_Floor("Up", 7)
-}      
+}
 //#####################################################################
 
 //#####################################################################
@@ -343,9 +340,6 @@ function sequence2() {
     column1.ElevatorList[1].currentFloor = 3
     column1.ElevatorList[1].IsStatusIDLE = true      // OBVIOUS TRUE OR FALSE
     start() 
-    column1.Best_Elevator(1 , "Up", find_Closest_Elevator)
-    column1.request_Elevator(1)
-    column1.request_Floor("Up", 6)
     sequence2_2()
     sequence2_3()
 }
@@ -369,9 +363,6 @@ function sequence2_2() {
     column1.ElevatorList[1].currentFloor = 6
     column1.ElevatorList[1].IsStatusIDLE = true      // OBVIOUS TRUE OR FALSE 
     start()
-    column1.Best_Elevator(3 , "Up", find_Closest_Elevator)
-    column1.request_Elevator(3)
-    column1.request_Floor("Up", 5)
 }
 //#####################################################################
 
@@ -389,13 +380,10 @@ function sequence2_3() {
     column1.User_Destination = 2
     column1.User_Direction = "Down"
     column1.User_Actual_Floor = 9
-    column1.ElevatorList[0].currentFloor = 10        // ENTER VALUES OF WHERE YOUR ELEVATOR ACTUALLY ARE
+    column1.ElevatorList[0].currentFloor = 10         // ENTER VALUES OF WHERE YOUR ELEVATOR ACTUALLY ARE
     column1.ElevatorList[1].currentFloor = 5
     column1.ElevatorList[1].IsStatusIDLE = false      // OBVIOUS TRUE OR FALSE
     start()
-    column1.Best_Elevator(9 , "Down", find_Closest_Elevator)
-    column1.request_Elevator(9)
-    column1.request_Floor("Down", 2)
 }
 //#####################################################################
 
@@ -413,13 +401,10 @@ function sequence3() {
     column1.User_Destination = 2
     column1.User_Direction = "Down"
     column1.User_Actual_Floor = 3
-    column1.ElevatorList[0].currentFloor = 10        // ENTER VALUES OF WHERE YOUR ELEVATOR ACTUALLY ARE
+    column1.ElevatorList[0].currentFloor = 10         // ENTER VALUES OF WHERE YOUR ELEVATOR ACTUALLY ARE
     column1.ElevatorList[1].currentFloor = 3
     column1.ElevatorList[1].IsStatusIDLE = false      // OBVIOUS TRUE OR FALSE 
     start()
-    column1.Best_Elevator(3 , "Down", find_Closest_Elevator)
-    column1.request_Elevator(3)
-    column1.request_Floor("Down", 2)
     sequence3_1()
 }
 //#####################################################################
@@ -438,13 +423,10 @@ function sequence3_1() {
     column1.User_Destination = 3
     column1.User_Direction = "Down"
     column1.User_Actual_Floor = 10
-    column1.ElevatorList[0].currentFloor = 2        // ENTER VALUES OF WHERE YOUR ELEVATOR ACTUALLY ARE
+    column1.ElevatorList[0].currentFloor = 2         // ENTER VALUES OF WHERE YOUR ELEVATOR ACTUALLY ARE
     column1.ElevatorList[1].currentFloor = 6
     column1.ElevatorList[1].IsStatusIDLE = true      // OBVIOUS TRUE OR FALSE 
     start()
-    column1.Best_Elevator(10 , "Down", find_Closest_Elevator)
-    column1.request_Elevator(10)
-    column1.request_Floor("Down", 3)
 }
 //#####################################################################
 
@@ -455,7 +437,7 @@ sequence3()
 //################## END OF SEQUENCE CHOOSE ###########################
 
 
-/*     
+/*
 --------------------------------------------------- TEST ------------------------------------------
 
 SET column1 to INSTANTIATE Column WITH 1, 1, 10, 2
