@@ -8,15 +8,8 @@ var now = new Date();
 // CREATING A FUNCTION THAT SLOW THE CONSOLE PROCESS
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
-/// Create variable that let the user input is own values ###
+}
 
-var User_response = null
-var User_Destination = null
-var User_Direction = null
-var User_Actual_Floor = 0
-
-var Elevator_Amount = 2
 
 //########################### CLASS CALL BUTTON ############################
 class callButton {
@@ -39,6 +32,10 @@ class Elevator {
         this.currentFloor = 1           // Actual floor of the elevator          
         this.Maxweight = 2500           // Maximum Weight
         this.ActualWeight = 0           // Actual Weight
+        this.User_response = null
+        this.User_Destination = null
+        this.User_Direction = null
+        this.User_Actual_Floor = 0
     }
 }
       
@@ -56,6 +53,11 @@ class Column {
         this.ElevatorList = []                              // An Elevator list        
         this.callButtonsList = []                           // A list of all call button (Up and down) on column
         this.chosenElevator = null                          // The best elevator that will be send to user
+        this.User_response = ""
+        this.User_Destination = 0
+        this.User_Direction = ""
+        this.User_Actual_Floor = 0
+
 
         //####### FINDING THE GOOD AMOUNT OF ELEVATOR #######
         for (var i = 0; i < this.Elevator_Amount; i++) {
@@ -75,7 +77,6 @@ class Column {
                     this.callButtonsList.push("NewCallButtonDown")
                 }    
             }
-            console.log(this.callButtonsList)
          //############## END CREATING CALLING BUTTON ########
     }
     //############## FIND THE BEST ELEVATOR #############
@@ -145,11 +146,15 @@ class Column {
             console.log("The elevator is at floor " + this.chosenElevator.currentFloor)
             this.chosenElevator.IsDirectionUp = true
             if (parseInt(User_Actual_Floor) == this.chosenElevator.currentFloor) {
+                console.log("----------------------")
                 console.log("The elevator is here")
                 sleep(1000);
+                console.log("")
                 console.log("Open Door")
                 sleep(1000);
-                console.log("Close Door")
+                doorOpening()
+                console.log("Close Door")            
+                doorClosing()
             }    
         }
     }
@@ -160,11 +165,15 @@ class Column {
             console.log("The elevator is at floor " + this.chosenElevator.currentFloor)
             this.chosenElevator.IsDirectionUp = false
             if (parseInt(User_Actual_Floor) == this.chosenElevator.currentFloor) {
+                console.log("----------------------")
                 console.log("The elevator is here")
                 sleep(1000);
+                console.log("")
                 console.log("Open Door")
                 sleep(1000);
+                doorOpening()
                 console.log("Close Door")
+                doorClosing()
             }    
         }            
     }                
@@ -179,9 +188,14 @@ class Column {
             console.log("The elevator is at floor " + this.chosenElevator.currentFloor)
             this.chosenElevator.IsDirectionUp = true
             if (parseInt(User_Destination) == this.chosenElevator.currentFloor) {
+                console.log("----------------------")
                 console.log("Arrived at destination")
                 sleep(1000);
+                console.log("")
                 console.log("Open Door")
+                doorOpening()
+                console.log("Close Door")
+                doorClosing()
             }
         }
     }
@@ -193,9 +207,14 @@ class Column {
             console.log("The elevator is at floor " + this.chosenElevator.currentFloor)
             this.chosenElevator.IsDirectionUp = true
             if (parseInt(User_Destination) == this.chosenElevator.currentFloor) {
+                console.log("----------------------")
                 console.log("Arrived at destination")
                 sleep(1000);
+                console.log("")
                 console.log("Open Door")
+                doorOpening()
+                console.log("Close Door")
+                doorClosing()
             }    
         }        
     }
@@ -228,25 +247,107 @@ class Column {
 
 } 
 //######################## END CLASS COLUMN #######################################
+
 column1 = new Column(1, 10, 2);
+var find_Closest_Elevator;
+
+//################ FUNCTION THAT START THE SCENARIO ######################
+function start() {
+    console.log("Elevator A is at " + column1.ElevatorList[0].currentFloor)
+    console.log("Elevator B is at " + column1.ElevatorList[1].currentFloor)
+    console.log("")
+    actual_Floor_Of_Elevators = [column1.ElevatorList[0].currentFloor, column1.ElevatorList[1].currentFloor]
+    //# # For each variable in the array
+    //# Find the absolute value of the difference between array values and the user actual floor
+    //# If less then our best elevator choice then this variable is choosen
+    find_Closest_Elevator = actual_Floor_Of_Elevators.reduce(function(prev, curr) {
+    return (Math.abs(curr - column1.User_Actual_Floor) < Math.abs(prev - column1.User_Actual_Floor) ? curr : prev);
+    }); 
+
+    column1.Best_Elevator(column1.User_Actual_Floor , column1.User_Direction, find_Closest_Elevator)
+    column1.request_Elevator(column1.User_Actual_Floor)
+    column1.request_Floor(column1.User_Direction, column1.User_Destination)
+}   
+
+//################ END FUNCTION THAT START THE SCENARIO ######################
+
+function doorOpening() {
+    console.log("")
+    console.log("_____  _____")
+    console.log("|<--|  |-->|")
+    console.log("|<--|  |-->|")
+    console.log("|<--|  |-->|")
+    console.log("|<--|  |-->|")
+    console.log("|<--|  |-->|")
+    console.log("|<--|  |-->|")
+    console.log("|<--|  |-->|")
+    console.log("|___|  |___|")
+    console.log("")
+}
+
+
+function doorClosing() {
+    console.log("")
+    console.log("_____  _____")
+    console.log("|-->|  |<--|")
+    console.log("|-->|  |<--|")
+    console.log("|-->|  |<--|")
+    console.log("|-->|  |<--|")
+    console.log("|-->|  |<--|")
+    console.log("|-->|  |<--|")
+    console.log("|-->|  |<--|")
+    console.log("|___|  |___|")
+    console.log("")
+}
+
 
 //#####################################################################
 //########################### SEQUENCE 1 ##############################
 //#####################################################################
 function sequence1() {
-      column1.ElevatorList[0].currentFloor = 2        // ENTER VALUES OF WHERE YOUR ELEVATOR ACTUALLY ARE
-      column1.ElevatorList[1].currentFloor = 6
-      column1.ElevatorList[1].IsStatusIDLE = true      // OBVIOUS TRUE OR FALSE 
+    console.log("")
+    console.log("")
+    console.log("---------------------------------------------------")
+    console.log("------------------ SEQUENCE 1 ---------------------")
+    console.log("---------------------------------------------------")
+    console.log("")  
+    column1.User_response = "no"
+    column1.User_Destination = 7
+    column1.User_Direction = "Up"
+    column1.User_Actual_Floor = 3
+    column1.ElevatorList[0].currentFloor = 2        // ENTER VALUES OF WHERE YOUR ELEVATOR ACTUALLY ARE
+    column1.ElevatorList[1].currentFloor = 6
+    column1.ElevatorList[1].IsStatusIDLE = true      // OBVIOUS TRUE OR FALSE 
+    start()
+    column1.Best_Elevator(3 , "Up", find_Closest_Elevator)
+    column1.request_Elevator(3)
+    column1.request_Floor("Up", 7)
 }      
 //#####################################################################
 
 //#####################################################################
-//########################### SEQUENCE 2.1 ############################
+//########################### SEQUENCE 2 ##############################
 //#####################################################################
 function sequence2() {
-      column1.ElevatorList[0].currentFloor = 10        // ENTER VALUES OF WHERE YOUR ELEVATOR ACTUALLY ARE
-      column1.ElevatorList[1].currentFloor = 3
-      column1.ElevatorList[1].IsStatusIDLE = true      // OBVIOUS TRUE OR FALSE 
+    console.log("")
+    console.log("")
+    console.log("---------------------------------------------------")
+    console.log("------------------ SEQUENCE 2 ---------------------")
+    console.log("---------------------------------------------------")
+    console.log("")
+    column1.User_response = "yes"
+    column1.User_Destination = 6
+    column1.User_Direction = "Up"
+    column1.User_Actual_Floor = 1
+    column1.ElevatorList[0].currentFloor = 10        // ENTER VALUES OF WHERE YOUR ELEVATOR ACTUALLY ARE
+    column1.ElevatorList[1].currentFloor = 3
+    column1.ElevatorList[1].IsStatusIDLE = true      // OBVIOUS TRUE OR FALSE
+    start() 
+    column1.Best_Elevator(1 , "Up", find_Closest_Elevator)
+    column1.request_Elevator(1)
+    column1.request_Floor("Up", 6)
+    sequence2_2()
+    sequence2_3()
 }
 //#####################################################################
 
@@ -254,9 +355,23 @@ function sequence2() {
 //########################## SEQUECE 2.2 ##############################
 //#####################################################################
 function sequence2_2() {
-      column1.ElevatorList[0].currentFloor = 10        // ENTER VALUES OF WHERE YOUR ELEVATOR ACTUALLY ARE
-      column1.ElevatorList[1].currentFloor = 6
-      column1.ElevatorList[1].IsStatusIDLE = true      // OBVIOUS TRUE OR FALSE 
+    console.log("")
+    console.log("")
+    console.log("---------------------------------------------------")
+    console.log("------------------ SEQUENCE 2.2 -------------------")
+    console.log("---------------------------------------------------")
+    console.log("")
+    column1.User_response = "no"
+    column1.User_Destination = 5
+    column1.User_Direction = "Up"
+    column1.User_Actual_Floor = 3
+    column1.ElevatorList[0].currentFloor = 10        // ENTER VALUES OF WHERE YOUR ELEVATOR ACTUALLY ARE
+    column1.ElevatorList[1].currentFloor = 6
+    column1.ElevatorList[1].IsStatusIDLE = true      // OBVIOUS TRUE OR FALSE 
+    start()
+    column1.Best_Elevator(3 , "Up", find_Closest_Elevator)
+    column1.request_Elevator(3)
+    column1.request_Floor("Up", 5)
 }
 //#####################################################################
 
@@ -264,9 +379,23 @@ function sequence2_2() {
 //########################## SEQUECE 2.3 ##############################
 //#####################################################################
 function sequence2_3() {
-      column1.ElevatorList[0].currentFloor = 10        // ENTER VALUES OF WHERE YOUR ELEVATOR ACTUALLY ARE
-      column1.ElevatorList[1].currentFloor = 5
-      column1.ElevatorList[1].IsStatusIDLE = false      // OBVIOUS TRUE OR FALSE
+    console.log("")
+    console.log("")
+    console.log("---------------------------------------------------")
+    console.log("------------------ SEQUENCE 2.3 -------------------")
+    console.log("---------------------------------------------------")
+    console.log("")
+    column1.User_response = "no"
+    column1.User_Destination = 2
+    column1.User_Direction = "Down"
+    column1.User_Actual_Floor = 9
+    column1.ElevatorList[0].currentFloor = 10        // ENTER VALUES OF WHERE YOUR ELEVATOR ACTUALLY ARE
+    column1.ElevatorList[1].currentFloor = 5
+    column1.ElevatorList[1].IsStatusIDLE = false      // OBVIOUS TRUE OR FALSE
+    start()
+    column1.Best_Elevator(9 , "Down", find_Closest_Elevator)
+    column1.request_Elevator(9)
+    column1.request_Floor("Down", 2)
 }
 //#####################################################################
 
@@ -274,9 +403,24 @@ function sequence2_3() {
 //########################## SEQUECE 3 ################################
 //#####################################################################
 function sequence3() {
-      column1.ElevatorList[0].currentFloor = 10        // ENTER VALUES OF WHERE YOUR ELEVATOR ACTUALLY ARE
-      column1.ElevatorList[1].currentFloor = 6
-      column1.ElevatorList[1].IsStatusIDLE = false      // OBVIOUS TRUE OR FALSE 
+    console.log("")
+    console.log("")
+    console.log("---------------------------------------------------")
+    console.log("------------------ SEQUENCE 3 ---------------------")
+    console.log("---------------------------------------------------")
+    console.log("")
+    column1.User_response = "no"
+    column1.User_Destination = 2
+    column1.User_Direction = "Down"
+    column1.User_Actual_Floor = 3
+    column1.ElevatorList[0].currentFloor = 10        // ENTER VALUES OF WHERE YOUR ELEVATOR ACTUALLY ARE
+    column1.ElevatorList[1].currentFloor = 3
+    column1.ElevatorList[1].IsStatusIDLE = false      // OBVIOUS TRUE OR FALSE 
+    start()
+    column1.Best_Elevator(3 , "Down", find_Closest_Elevator)
+    column1.request_Elevator(3)
+    column1.request_Floor("Down", 2)
+    sequence3_1()
 }
 //#####################################################################
 
@@ -284,39 +428,31 @@ function sequence3() {
 //########################## SEQUECE 3.1 ##############################
 //#####################################################################
 function sequence3_1() {
-      column1.ElevatorList[0].currentFloor = 2        // ENTER VALUES OF WHERE YOUR ELEVATOR ACTUALLY ARE
-      column1.ElevatorList[1].currentFloor = 6
-      column1.ElevatorList[1].IsStatusIDLE = true      // OBVIOUS TRUE OR FALSE 
+    console.log("")
+    console.log("")
+    console.log("---------------------------------------------------")
+    console.log("------------------ SEQUENCE 3.1 -------------------")
+    console.log("---------------------------------------------------")
+    console.log("")
+    column1.User_response = "no"
+    column1.User_Destination = 3
+    column1.User_Direction = "Down"
+    column1.User_Actual_Floor = 10
+    column1.ElevatorList[0].currentFloor = 2        // ENTER VALUES OF WHERE YOUR ELEVATOR ACTUALLY ARE
+    column1.ElevatorList[1].currentFloor = 6
+    column1.ElevatorList[1].IsStatusIDLE = true      // OBVIOUS TRUE OR FALSE 
+    start()
+    column1.Best_Elevator(10 , "Down", find_Closest_Elevator)
+    column1.request_Elevator(10)
+    column1.request_Floor("Down", 3)
 }
 //#####################################################################
 
 //#################### CHOOSE YOUR SEQUENCE ###########################
-sequence1()
+//sequence1()
 //sequence2()
-//sequence2_2()
-//sequence2_3()
-//sequence3()
-//sequence3_1()
+sequence3()
 //################## END OF SEQUENCE CHOOSE ###########################
-
-//###### LIST YOUR PARAMETER of AN ARRAY ##############################
-actual_Floor_Of_Elevators = [column1.ElevatorList[0].currentFloor, column1.ElevatorList[1].currentFloor]
-
-console.log("Elevator A is at floor " + (column1.ElevatorList[0].currentFloor))
-console.log("Elevator B is at floor " + (column1.ElevatorList[1].currentFloor))
-
-//# # For each variable of the array
-//# Find the absolute value of the difference between array values and the user actual floor
-//# If less then our best elevator choice then this variable is choosen
-var find_Closest_Elevator = actual_Floor_Of_Elevators.reduce(function(prev, curr) {
-    return (Math.abs(curr - User_Actual_Floor) < Math.abs(prev - User_Actual_Floor) ? curr : prev);
-  });
-
-//### CALLING YOUR FUNCTION TO LET THE ALGORITHME RUN #####
-
-column1.Best_Elevator(3 , "Up", find_Closest_Elevator)
-column1.request_Elevator(3)
-column1.request_Floor("Up", 6)
 
 
 /*     

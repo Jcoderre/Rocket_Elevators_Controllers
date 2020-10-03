@@ -189,6 +189,8 @@ class Column:
                         print("Open Door")
                         doorOpening()
                         time.sleep(1)
+                        print("Door Close")
+                        doorClosing()
 
       def moveElevatorDown(self, User_Destination):
             while int(User_Destination) < self.chosenElevator.currentFloor:
@@ -205,6 +207,8 @@ class Column:
                         print("Open Door")
                         doorOpening()
                         time.sleep(1)
+                        print("Door Close")
+                        doorClosing()
       ################## END WHILE INSIDE #################
 
       #################### COLUMN INTERFACE  #################
@@ -478,7 +482,7 @@ def sequence3_1():
 
 #################### CHOOSE YOUR SEQUENCE ###########################
 #sequence1()
-#sequence2()
+sequence2()
 #sequence3()
 ################## END OF SEQUENCE CHOOSE ###########################
 
