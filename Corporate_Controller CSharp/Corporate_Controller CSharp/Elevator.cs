@@ -18,6 +18,7 @@ namespace Corporate_Controller_CSharp
         public int MaxWeight;
         public int ActualWeight;
 
+
         public Elevator(int id)
         {
             Id = id;
@@ -29,7 +30,10 @@ namespace Corporate_Controller_CSharp
             CurrentFloor = 1;           // Actual floor of the elevator          
             MaxWeight = 2500;           // Maximum Weight
             ActualWeight = 0;           // Actual Weight
+
+        
         }
+
 
     }
 }

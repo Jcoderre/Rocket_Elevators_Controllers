@@ -53,10 +53,11 @@ namespace Corporate_Controller_CSharp
             }
 
             // Creating a series of button for the Reception 1 For each floor
+            // Create a List of floor from 1 to 66
 
             for (int y = minFloor; y < maxFloor + 1; y++) 
             {
-                ReceptionCallButton.Add("b");
+                ReceptionCallButton.Add(y);
                 Console.WriteLine(ReceptionCallButton.Count);
             }
 

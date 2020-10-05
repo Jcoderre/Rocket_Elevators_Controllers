@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Corporate_Controller_CSharp
@@ -28,6 +29,7 @@ namespace Corporate_Controller_CSharp
             FloorAmount = (maxFloor + 1) - minFloor;
             ElevatorList = new List<Elevator>();
             IsStatusIdle = true;
+
             //ChosenElevator = chosenElevator;
 
             //List of elevator for each column
@@ -39,9 +41,31 @@ namespace Corporate_Controller_CSharp
                 Console.WriteLine(ElevatorList);
             }
 
-            
 
         }
+
+
+
+
+
+
+
+
+
+
+
+    public void MoveUp(int UserActualFloor)
+    {
+        while (UserActualFloor > ChosenElevator.currentFloor)
+        {
+            ChosenElevator.currentFloor += 1;
+            ChosenElevator.IsStatusIdle = false;
+            Console.WriteLine("The elevator is at floor: " + ChosenElevator.currentFloor);
+            ChosenElevator.IsDirectionUp = true;
+
+        }
+    }
+
     }
 
 }
