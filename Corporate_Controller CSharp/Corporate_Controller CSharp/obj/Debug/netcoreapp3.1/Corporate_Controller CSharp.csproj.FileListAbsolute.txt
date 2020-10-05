@@ -1,0 +1,13 @@
+C:\Users\Joey\Desktop\Codeboxx\Rocket_Elevator_Controller\Odyssey Week 1-2\Corporate_Controller CSharp\Corporate_Controller CSharp\bin\Debug\netcoreapp3.1\Corporate_Controller CSharp.exe
+C:\Users\Joey\Desktop\Codeboxx\Rocket_Elevator_Controller\Odyssey Week 1-2\Corporate_Controller CSharp\Corporate_Controller CSharp\bin\Debug\netcoreapp3.1\Corporate_Controller CSharp.deps.json
+C:\Users\Joey\Desktop\Codeboxx\Rocket_Elevator_Controller\Odyssey Week 1-2\Corporate_Controller CSharp\Corporate_Controller CSharp\bin\Debug\netcoreapp3.1\Corporate_Controller CSharp.runtimeconfig.json
+C:\Users\Joey\Desktop\Codeboxx\Rocket_Elevator_Controller\Odyssey Week 1-2\Corporate_Controller CSharp\Corporate_Controller CSharp\bin\Debug\netcoreapp3.1\Corporate_Controller CSharp.runtimeconfig.dev.json
+C:\Users\Joey\Desktop\Codeboxx\Rocket_Elevator_Controller\Odyssey Week 1-2\Corporate_Controller CSharp\Corporate_Controller CSharp\bin\Debug\netcoreapp3.1\Corporate_Controller CSharp.dll
+C:\Users\Joey\Desktop\Codeboxx\Rocket_Elevator_Controller\Odyssey Week 1-2\Corporate_Controller CSharp\Corporate_Controller CSharp\bin\Debug\netcoreapp3.1\Corporate_Controller CSharp.pdb
+C:\Users\Joey\Desktop\Codeboxx\Rocket_Elevator_Controller\Odyssey Week 1-2\Corporate_Controller CSharp\Corporate_Controller CSharp\obj\Debug\netcoreapp3.1\Corporate_Controller CSharp.csprojAssemblyReference.cache
+C:\Users\Joey\Desktop\Codeboxx\Rocket_Elevator_Controller\Odyssey Week 1-2\Corporate_Controller CSharp\Corporate_Controller CSharp\obj\Debug\netcoreapp3.1\Corporate_Controller CSharp.AssemblyInfoInputs.cache
+C:\Users\Joey\Desktop\Codeboxx\Rocket_Elevator_Controller\Odyssey Week 1-2\Corporate_Controller CSharp\Corporate_Controller CSharp\obj\Debug\netcoreapp3.1\Corporate_Controller CSharp.AssemblyInfo.cs
+C:\Users\Joey\Desktop\Codeboxx\Rocket_Elevator_Controller\Odyssey Week 1-2\Corporate_Controller CSharp\Corporate_Controller CSharp\obj\Debug\netcoreapp3.1\Corporate_Controller CSharp.csproj.CoreCompileInputs.cache
+C:\Users\Joey\Desktop\Codeboxx\Rocket_Elevator_Controller\Odyssey Week 1-2\Corporate_Controller CSharp\Corporate_Controller CSharp\obj\Debug\netcoreapp3.1\Corporate_Controller CSharp.dll
+C:\Users\Joey\Desktop\Codeboxx\Rocket_Elevator_Controller\Odyssey Week 1-2\Corporate_Controller CSharp\Corporate_Controller CSharp\obj\Debug\netcoreapp3.1\Corporate_Controller CSharp.pdb
+C:\Users\Joey\Desktop\Codeboxx\Rocket_Elevator_Controller\Odyssey Week 1-2\Corporate_Controller CSharp\Corporate_Controller CSharp\obj\Debug\netcoreapp3.1\Corporate_Controller CSharp.genruntimeconfig.cache

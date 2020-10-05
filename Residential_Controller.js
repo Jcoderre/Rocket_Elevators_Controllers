@@ -177,7 +177,7 @@ class Column {
         }
     }
     //######################## END MOVE ################
-    
+
     //################## MOVE WHILE INSIDE ################
     moveElevatorUp(User_Destination) {
         while (parseInt(User_Destination) > this.chosenElevator.currentFloor) {
