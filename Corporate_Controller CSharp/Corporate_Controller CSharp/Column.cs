@@ -37,35 +37,202 @@ namespace Corporate_Controller_CSharp
             // Default value 1 to skip an elevator assign with 0
             for (int i = 1; i < elevatorAmountPerColumn + 1; i++)
             {
-                ElevatorList.Add(new Elevator(i+1));
+                var elevator = new Elevator(i + 1);
+                ElevatorList.Add(elevator);
                 Console.WriteLine(ElevatorList);
             }
 
 
         }
 
-
-
-
-
-
-
-
-
-
-
-    public void MoveUp(int UserActualFloor)
-    {
-        while (UserActualFloor > ChosenElevator.currentFloor)
+        public void Best_Elevator(int UserActualFloor, string UserDirection, int find_Best_Elevator)
         {
-            ChosenElevator.currentFloor += 1;
-            ChosenElevator.IsStatusIdle = false;
-            Console.WriteLine("The elevator is at floor: " + ChosenElevator.currentFloor);
-            ChosenElevator.IsDirectionUp = true;
-
+            var bestScore = 10;
+            for (elevator in ElevatorList)
+            {
+                if (UserDirection == "Up")
+                {
+                    if (elevator.IsDirectionUp == true && UserActualFloor >= elevator.CurrentFloor)
+                    {
+                        if (bestScore > 1)
+                        {
+                            ChosenElevator = elevator;
+                            bestScore = 1;
+                        }
+                    }
+                    else if (elevatorIsDirectionUp == false)
+                    {
+                        if (bestScore > 8)
+                        {
+                            ChosenElevator = elevator;
+                            bestScore = 8;
+                        }
+                    }
+                    else if (IsStatusIdle == true)
+                    {
+                        if (find_Closest_Elevator == ElevatorList[0].currentFloor)
+                        {
+                            if (bestScore > 2)
+                            {
+                                ChosenElevator = elevator;
+                                bestScore = 2;
+                            }
+                        }
+                        else if (find_Closest_Elevator == ElevatorList[1].currentFloor)
+                        {
+                            if (bestScore > 1)
+                            {
+                                ChosenElevator = elevator;
+                                bestScore = 2;
+                            }
+                        }
+                    }
+                } else if (UserDirection == "Down")
+                {
+                    if (elevator.IsDirectionUp == true && UserActualFloor >= elevator.CurrentFloor)
+                    {
+                        if (bestScore > 1)
+                        {
+                            ChosenElevator = elevator;
+                            bestScore = 1;
+                        }
+                    }
+                    else if (elevatorIsDirectionUp == false)
+                    {
+                        if (bestScore > 8)
+                        {
+                            ChosenElevator = elevator;
+                            bestScore = 8;
+                        }
+                    }
+                    else if (IsStatusIdle == true)
+                    {
+                        if (find_Closest_Elevator == ElevatorList[0].currentFloor)
+                        {
+                            if (bestScore > 2)
+                            {
+                                ChosenElevator = elevator;
+                                bestScore = 2;
+                            }
+                        }
+                        else if (find_Closest_Elevator == ElevatorList[1].currentFloor)
+                        {
+                            if (bestScore > 1)
+                            {
+                                ChosenElevator = elevator;
+                                bestScore = 2;
+                            }
+                        }
+                    }
+                }
+            }
         }
+
+
+        public void MoveUp(int UserActualFloor, int UserDestination)
+        {
+            while (UserActualFloor > ChosenElevator.currentFloor || UserDestination < ChosenElevator.currentFloor)
+            {
+                ChosenElevator.currentFloor += 1;
+                ChosenElevator.IsStatusIdle = false;
+                Console.WriteLine("The elevator is at floor: " + ChosenElevator.currentFloor);
+                ChosenElevator.IsDirectionUp = true;
+                if (UserDestination == chosenElevator.currentFloor || UserDestination == ChosenElevator.currentFloor)
+                {
+                    Console.WriteLine("----------------------");
+                    Console.WriteLine("Arrived at destination");
+                    Console.WriteLine("");
+                    Console.WriteLine("Open Door");
+                    DoorOpening();
+                    Console.WriteLine("Close Door");
+                    DoorClosing();
+                }
+            }
+        }
+
+        public void MoveDown(int UserActualFloor, int UserDestination)
+        {
+            while (UserActualFloor < ChosenElevator.currentFloor || UserDestination < ChosenElevator.currentFloor)
+            {
+                ChosenElevator.currentFloor -= 1;
+                ChosenElevator.IsStatusIdle = false;
+                Console.WriteLine("The elevator is at floor: " + ChosenElevator.currentFloor);
+                ChosenElevator.IsDirectionUp = false;
+                if (UserDestination == chosenElevator.currentFloor || UserDestination == ChosenElevator.currentFloor)
+                {
+                    Console.WriteLine("----------------------");
+                    Console.WriteLine("Arrived at destination");
+                    Console.WriteLine("");
+                    Console.WriteLine("Open Door");
+                    DoorOpening();
+                    Console.WriteLine("Close Door");
+                    DoorClosing();
+                }
+            }
+        }
+
+        public void RequestElevator(int UserActualFloor)
+        {
+            ChosenElevator.elevatorQueue.Add(UserActualFloor);
+            if (UserActualFloor > ChosenElevator.CurrentFloor)
+            {
+                ChosenElevator.IsDirectionUp = true;
+                MoveUp(UserActualFloor, UserDestination);
+            } else if (UserActualFloor < ChosenElevator.CurrentFloor)
+            {
+
+            }
+        }
+
+        public void AssignElevator(int UserDestination)
+        {
+            ChosenElevator.requestButtonList.Add(UserDestination);
+            if (UserDirection == "Up")
+            {
+                MoveUp(UserActualFloor, UserDestination);
+            } else if (UserDirection == "Down")
+            {
+                MoveDown(UserActualFloor,UserDestination);
+            }
+        }
+
+    public void DoorClosing()
+    {
+        Console.WriteLine("");
+        Console.WriteLine("_____  _____");
+        Console.WriteLine("|<--|  |-->|");
+        Console.WriteLine("|<--|  |-->|");
+        Console.WriteLine("|<--|  |-->|");
+        Console.WriteLine("|<--|  |-->|");
+        Console.WriteLine("|<--|  |-->|");
+        Console.WriteLine("|<--|  |-->|");
+        Console.WriteLine("|<--|  |-->|");
+        Console.WriteLine("|___|  |___|");
+        Console.WriteLine("");
     }
 
+    public void DoorOpening()
+    {
+        Console.WriteLine("");
+        Console.WriteLine("_____  _____");
+        Console.WriteLine("|-->|  |<--|");
+        Console.WriteLine("|-->|  |<--|");
+        Console.WriteLine("|-->|  |<--|");
+        Console.WriteLine("|-->|  |<--|");
+        Console.WriteLine("|-->|  |<--|");
+        Console.WriteLine("|-->|  |<--|");
+        Console.WriteLine("|-->|  |<--|");
+        Console.WriteLine("|___|  |___|");
+        Console.WriteLine("");
     }
+
+
+
+
+
+    }
+
+
+   
 
 }

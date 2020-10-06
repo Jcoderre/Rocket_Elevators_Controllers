@@ -27,7 +27,8 @@ namespace Corporate_Controller_CSharp
             // The Column generate in this case Five elevator each of them create in the column section 
             for (int i = 1; i < amountOfColumn + 1; i++)
             {
-                ColumnList.Add(new Column(i + 1, -6 , 59, 5));
+                var column = new Column(i + 1, -6, 59, 5);
+                ColumnList.Add(column);
                 Console.WriteLine(ColumnList);
             }
 
