@@ -270,7 +270,7 @@ function start() {
 //################ END FUNCTION THAT START THE SCENARIO ######################
 
 function doorOpening() {
-    console.log("")
+    console.log("") 
     console.log("_____  _____")
     console.log("|<--|  |-->|")
     console.log("|<--|  |-->|")

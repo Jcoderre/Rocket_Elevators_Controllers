@@ -29,10 +29,10 @@ namespace Corporate_Controller_CSharp
             // The Column generate in this case Five elevator each of them create in the column section 
             for (int i = 1; i < amountOfColumn + 1; i++)
             {
-                var column = new Column(i , -6, 59, 5);
+                Column column = new Column(i , -6, 59, 5);
                 ColumnList.Add(column);
                 Console.WriteLine(ColumnList);
-                Console.WriteLine(column.Id);
+                //Console.WriteLine(column.Id);
             }
 
             // Creating a series of CallButton for each floor
@@ -69,7 +69,7 @@ namespace Corporate_Controller_CSharp
             for (int y = minFloor; y < maxFloor + 1; y++)
             {
                 FloorList.Add(y);
-                Console.WriteLine(FloorList.Count);
+                //Console.WriteLine(FloorList.Count);
             }
 
             

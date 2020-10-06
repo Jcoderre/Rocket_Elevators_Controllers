@@ -33,6 +33,7 @@ using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Threading;
 
 namespace Corporate_Controller_CSharp
 {
@@ -41,7 +42,7 @@ namespace Corporate_Controller_CSharp
     {
         static void Main(string[] args)
         {
-            var battery1 = new Battery(4, -6, 59);
+            Battery battery = new Battery(4, -6, 59);
 
         }
     }
