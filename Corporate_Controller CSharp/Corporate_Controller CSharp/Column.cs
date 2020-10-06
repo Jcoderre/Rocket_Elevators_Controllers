@@ -7,7 +7,8 @@ using System.Text;
 
 namespace Corporate_Controller_CSharp
 {
-    class Column
+
+    public class Column 
     {
         public int Id;
         public int MinFloor;
@@ -21,7 +22,7 @@ namespace Corporate_Controller_CSharp
         public int UserDestination;
         public int UserActualFloor;
 
-        public Column(int id, int minFloor, int maxFloor, int elevatorAmountPerColumn)
+        public Column(int id, int minFloor, int maxFloor, int elevatorAmountPerColumn )
         {
             Id = id;
             MinFloor = minFloor;
@@ -37,14 +38,14 @@ namespace Corporate_Controller_CSharp
             // Default value 1 to skip an elevator assign with 0
             for (int i = 1; i < elevatorAmountPerColumn + 1; i++)
             {
-                var elevator = new Elevator(i + 1);
+                var elevator = new Elevator(i);
                 ElevatorList.Add(elevator);
                 Console.WriteLine(ElevatorList);
+                Console.WriteLine(elevator.Id);
             }
 
-
         }
-
+/*
         public void Best_Elevator(int UserActualFloor, string UserDirection, int find_Best_Elevator)
         {
             var bestScore = 10;
@@ -60,7 +61,7 @@ namespace Corporate_Controller_CSharp
                             bestScore = 1;
                         }
                     }
-                    else if (elevatorIsDirectionUp == false)
+                    else if (elevator.IsDirectionUp == false)
                     {
                         if (bestScore > 8)
                         {
@@ -128,7 +129,7 @@ namespace Corporate_Controller_CSharp
             }
         }
 
-
+ 
         public void MoveUp(int UserActualFloor, int UserDestination)
         {
             while (UserActualFloor > ChosenElevator.currentFloor || UserDestination < ChosenElevator.currentFloor)
@@ -171,9 +172,10 @@ namespace Corporate_Controller_CSharp
             }
         }
 
+        
         public void RequestElevator(int UserActualFloor)
         {
-            ChosenElevator.elevatorQueue.Add(UserActualFloor);
+            ElevatorList.elevatorQueue.Add(UserActualFloor);
             if (UserActualFloor > ChosenElevator.CurrentFloor)
             {
                 ChosenElevator.IsDirectionUp = true;
@@ -186,7 +188,7 @@ namespace Corporate_Controller_CSharp
 
         public void AssignElevator(int UserDestination)
         {
-            ChosenElevator.requestButtonList.Add(UserDestination);
+            ChosenElevator.RequestButtonList.Add(UserDestination);
             if (UserDirection == "Up")
             {
                 MoveUp(UserActualFloor, UserDestination);
@@ -195,7 +197,7 @@ namespace Corporate_Controller_CSharp
                 MoveDown(UserActualFloor,UserDestination);
             }
         }
-
+*/
     public void DoorClosing()
     {
         Console.WriteLine("");
@@ -227,7 +229,7 @@ namespace Corporate_Controller_CSharp
     }
 
 
-
+  
 
 
     }
@@ -235,4 +237,4 @@ namespace Corporate_Controller_CSharp
 
    
 
-}
+} 

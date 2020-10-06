@@ -5,11 +5,12 @@ using System.Text;
 
 namespace Corporate_Controller_CSharp
 {
-    class Battery
+    public class Battery
     {
         public List<Callbutton> CallButtonList;
         public List<int> ReceptionCallButton;
         public List<Column> ColumnList;
+        public List<int> FloorList;
         public int MinFloor;
         public int MaxFloor;
         public int FloorAmount;
@@ -22,14 +23,16 @@ namespace Corporate_Controller_CSharp
             FloorAmount = (maxFloor + 1) - minFloor;
             CallButtonList = new List<Callbutton>();
             ReceptionCallButton = new List<int>();
+            FloorList = new List<int>();
 
             // Creating the Number of Column Needed for the building
             // The Column generate in this case Five elevator each of them create in the column section 
             for (int i = 1; i < amountOfColumn + 1; i++)
             {
-                var column = new Column(i + 1, -6, 59, 5);
+                var column = new Column(i , -6, 59, 5);
                 ColumnList.Add(column);
                 Console.WriteLine(ColumnList);
+                Console.WriteLine(column.Id);
             }
 
             // Creating a series of CallButton for each floor
@@ -59,11 +62,18 @@ namespace Corporate_Controller_CSharp
             for (int y = minFloor; y < maxFloor + 1; y++) 
             {
                 ReceptionCallButton.Add(y);
-                Console.WriteLine(ReceptionCallButton.Count);
             }
 
+            // Creating a list of Floor deserved by the building in a For Loop
 
+            for (int y = minFloor; y < maxFloor + 1; y++)
+            {
+                FloorList.Add(y);
+                Console.WriteLine(FloorList.Count);
+            }
 
+            
         }
+       
     }
 }

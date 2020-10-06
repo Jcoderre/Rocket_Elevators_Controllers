@@ -1,6 +1,4 @@
-//##############################################################
-//######### RESIDENTIAL CONTROLLER JAVASCRIPT VERSION ##########
-//##############################################################
+ 
 
 // FIND OUR ACTUAL TIME AND DATE
 var now = new Date();
