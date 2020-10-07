@@ -11,7 +11,7 @@ namespace Corporate_Controller_CSharp
     {
         public int Id;
         public List<int> ElevatorQueue = new List<int>();       // Unordered set of floor request
-        public List<int> RequestButtonList = new List<int>();   // Array of Requested Buttons
+        public List<int> DestinationList = new List<int>();   // Array of Requested Buttons
         public bool IsStatusIdle = true;                        // Boolean ->  IDLE, Moving
         public bool? IsDirectionUp = null;                      // Boolean ->  Up, Down
         public bool IsDoorsClose = true;                        // Boolean ->  Close or Open

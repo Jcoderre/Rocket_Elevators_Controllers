@@ -42,8 +42,10 @@ namespace Corporate_Controller_CSharp
     {
         static void Main(string[] args)
         {
-            Battery battery = new Battery(4, -6, 59);
+            Battery battery = new Battery(4, -6, 59); 
 
         }
+
+
     }
 }
