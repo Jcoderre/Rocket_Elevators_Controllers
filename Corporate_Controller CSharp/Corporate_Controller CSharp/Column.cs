@@ -85,20 +85,20 @@ namespace Corporate_Controller_CSharp
                 }
                 else if (UserDirection == "Down")
                 {
-                    if (elevator.IsDirectionUp == true && UserActualFloor >= elevator.CurrentFloor)
-                    {
-                        if (bestScore > 1)
-                        {
-                            ChosenElevator = elevator;
-                            bestScore = 1;
-                        }
-                    }
-                    else if (elevator.IsDirectionUp == false)
+                    if (elevator.IsDirectionUp == true)
                     {
                         if (bestScore > 8)
                         {
                             ChosenElevator = elevator;
                             bestScore = 8;
+                        }
+                    }
+                    else if (elevator.IsDirectionUp == false && UserActualFloor <= elevator.CurrentFloor)
+                    {
+                        if (bestScore > 1)
+                        {
+                            ChosenElevator = elevator;
+                            bestScore = 1;
                         }
                     }
                     else if (elevator.IsStatusIdle == true)
@@ -117,7 +117,6 @@ namespace Corporate_Controller_CSharp
 
         public void MoveUp(int UserActualFloor)
         {
-            ChosenElevator = ElevatorList[1];
             while (UserActualFloor > ChosenElevator.CurrentFloor)
             {
                 ChosenElevator.CurrentFloor += 1;
@@ -140,7 +139,6 @@ namespace Corporate_Controller_CSharp
 
         public void MoveDown(int UserActualFloor)
         {
-            ChosenElevator = ElevatorList[1];
             while (UserActualFloor < ChosenElevator.CurrentFloor)
             {
                 ChosenElevator.CurrentFloor -= 1;
@@ -163,7 +161,6 @@ namespace Corporate_Controller_CSharp
 
         public void ElevatorMoveUp(int UserDestination)
         {
-            ChosenElevator = ElevatorList[1];
             while (UserDestination > ChosenElevator.CurrentFloor)
             {
                 ChosenElevator.CurrentFloor += 1;
@@ -186,7 +183,6 @@ namespace Corporate_Controller_CSharp
 
         public void ElevatorMoveDown(int UserDestination)
         {
-            ChosenElevator = ElevatorList[1];
             while (UserDestination < ChosenElevator.CurrentFloor)
             {
                 ChosenElevator.CurrentFloor -= 1;
@@ -211,7 +207,6 @@ namespace Corporate_Controller_CSharp
 
         public void RequestElevator(int UserActualFloor)
         {
-            Best_Elevator(UserActualFloor, UserDirection);
             ChosenElevator.ElevatorQueue.Add(UserActualFloor);
             if (UserActualFloor > ChosenElevator.CurrentFloor)
             {
@@ -231,7 +226,7 @@ namespace Corporate_Controller_CSharp
 
         public void AssignElevator(int UserDestination)
         {
-            Best_Elevator(UserActualFloor, UserDirection);
+            
             ChosenElevator.DestinationList.Add(UserDestination);
             if (UserDestination > groundFloorLevel)
             {
@@ -285,10 +280,26 @@ namespace Corporate_Controller_CSharp
             Console.WriteLine("");
             Console.WriteLine("Hello world");
             Console.WriteLine("");
-            // If the user is at the GroundFloor
+            Best_Elevator(UserActualFloor, UserDirection);
+            // If the user is at the GroundFloor  use AssignElevator function
+            // If user is at an other
+
+            /*if (UserActualFloor == ChosenElevator.CurrentFloor)
+            {
+                if (UserActualFloor < UserDestination)
+                {
+                    ElevatorMoveUp(UserDestination);
+                }
+                else if (UserActualFloor > UserDestination)
+                {
+                    ElevatorMoveDown(UserDestination);
+                }
+            }*/
+
             if (UserActualFloor == 1) {
                 AssignElevator(UserDestination);
-            }else if (UserActualFloor != 1) {
+            }
+            else if (UserActualFloor != 1) {
                 RequestElevator(UserActualFloor);
             }
         }

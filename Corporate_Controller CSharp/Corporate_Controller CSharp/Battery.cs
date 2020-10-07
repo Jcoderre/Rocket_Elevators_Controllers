@@ -119,34 +119,34 @@ namespace Corporate_Controller_CSharp
             Console.WriteLine("------------------ SEQUENCE 2 ---------------------");
             Console.WriteLine("---------------------------------------------------");
             Console.WriteLine("");
-            ColumnList[2].ElevatorList[1].CurrentFloor = 1;
-            ColumnList[2].ElevatorList[1].IsStatusIdle = true;
-            ColumnList[2].ElevatorList[1].IsDirectionUp = null;
+            ColumnList[2].ElevatorList[0].CurrentFloor = 1;
+            ColumnList[2].ElevatorList[0].IsStatusIdle = true;
+            ColumnList[2].ElevatorList[0].IsDirectionUp = null;
             //--
-            ColumnList[2].ElevatorList[2].CurrentFloor = 23;
+            ColumnList[2].ElevatorList[1].CurrentFloor = 23;
+            ColumnList[2].ElevatorList[1].IsStatusIdle = false;
+            ColumnList[2].ElevatorList[1].IsDirectionUp = true;
+            //--
+            ColumnList[2].ElevatorList[2].CurrentFloor = 33;
             ColumnList[2].ElevatorList[2].IsStatusIdle = false;
-            ColumnList[2].ElevatorList[2].IsDirectionUp = true;
+            ColumnList[2].ElevatorList[2].IsDirectionUp = false;
             //--
-            ColumnList[2].ElevatorList[3].CurrentFloor = 33;
+            ColumnList[2].ElevatorList[3].CurrentFloor = 40;
             ColumnList[2].ElevatorList[3].IsStatusIdle = false;
             ColumnList[2].ElevatorList[3].IsDirectionUp = false;
             //--
-            ColumnList[2].ElevatorList[4].CurrentFloor = 40;
+            ColumnList[2].ElevatorList[4].CurrentFloor = 39;
             ColumnList[2].ElevatorList[4].IsStatusIdle = false;
             ColumnList[2].ElevatorList[4].IsDirectionUp = false;
-            //--
-            ColumnList[2].ElevatorList[5].CurrentFloor = 39;
-            ColumnList[2].ElevatorList[5].IsStatusIdle = false;
-            ColumnList[2].ElevatorList[5].IsDirectionUp = false;
             //--
             ColumnList[2].UserActualFloor = 1;
             ColumnList[2].UserDestination = 36;
             ColumnList[2].UserDirection = "Up";
-            Console.WriteLine("Elevator A is at floor " + ColumnList[3].ElevatorList[1].CurrentFloor);
-            Console.WriteLine("Elevator B is at floor " + ColumnList[3].ElevatorList[2].CurrentFloor);
-            Console.WriteLine("Elevator C is at floor " + ColumnList[3].ElevatorList[3].CurrentFloor);
-            Console.WriteLine("Elevator D is at floor " + ColumnList[3].ElevatorList[4].CurrentFloor);
-            Console.WriteLine("Elevator E is at floor " + ColumnList[3].ElevatorList[5].CurrentFloor);
+            Console.WriteLine("Elevator A is at floor " + ColumnList[2].ElevatorList[0].CurrentFloor);
+            Console.WriteLine("Elevator B is at floor " + ColumnList[2].ElevatorList[1].CurrentFloor);
+            Console.WriteLine("Elevator C is at floor " + ColumnList[2].ElevatorList[2].CurrentFloor);
+            Console.WriteLine("Elevator D is at floor " + ColumnList[2].ElevatorList[3].CurrentFloor);
+            Console.WriteLine("Elevator E is at floor " + ColumnList[2].ElevatorList[4].CurrentFloor);
             ColumnList[2].Start();
         }
 
@@ -158,34 +158,34 @@ namespace Corporate_Controller_CSharp
             Console.WriteLine("------------------ SEQUENCE 3 ---------------------");
             Console.WriteLine("---------------------------------------------------");
             Console.WriteLine("");
-            ColumnList[3].ElevatorList[1].CurrentFloor = 58;
-            ColumnList[3].ElevatorList[1].IsStatusIdle = false;
-            ColumnList[3].ElevatorList[1].IsDirectionUp = false;
+            ColumnList[3].ElevatorList[0].CurrentFloor = 58;
+            ColumnList[3].ElevatorList[0].IsStatusIdle = false;
+            ColumnList[3].ElevatorList[0].IsDirectionUp = false;
             //--
-            ColumnList[3].ElevatorList[2].CurrentFloor = 50;
+            ColumnList[3].ElevatorList[1].CurrentFloor = 50;
+            ColumnList[3].ElevatorList[1].IsStatusIdle = false;
+            ColumnList[3].ElevatorList[1].IsDirectionUp = true;
+            //--
+            ColumnList[3].ElevatorList[2].CurrentFloor = 46;
             ColumnList[3].ElevatorList[2].IsStatusIdle = false;
             ColumnList[3].ElevatorList[2].IsDirectionUp = true;
             //--
-            ColumnList[3].ElevatorList[3].CurrentFloor = 46;
+            ColumnList[3].ElevatorList[3].CurrentFloor = 1;
             ColumnList[3].ElevatorList[3].IsStatusIdle = false;
             ColumnList[3].ElevatorList[3].IsDirectionUp = true;
             //--
-            ColumnList[3].ElevatorList[4].CurrentFloor = 1;
+            ColumnList[3].ElevatorList[4].CurrentFloor = 60;
             ColumnList[3].ElevatorList[4].IsStatusIdle = false;
-            ColumnList[3].ElevatorList[4].IsDirectionUp = true;
-            //--
-            ColumnList[3].ElevatorList[5].CurrentFloor = 60;
-            ColumnList[3].ElevatorList[5].IsStatusIdle = false;
-            ColumnList[3].ElevatorList[5].IsDirectionUp = false;
+            ColumnList[3].ElevatorList[4].IsDirectionUp = false;
             //--
             ColumnList[3].UserActualFloor = 54;
             ColumnList[3].UserDestination = 1;
             ColumnList[3].UserDirection = "Down";
-            Console.WriteLine("Elevator A is at floor " + ColumnList[4].ElevatorList[1].CurrentFloor);
-            Console.WriteLine("Elevator B is at floor " + ColumnList[4].ElevatorList[2].CurrentFloor);
-            Console.WriteLine("Elevator C is at floor " + ColumnList[4].ElevatorList[3].CurrentFloor);
-            Console.WriteLine("Elevator D is at floor " + ColumnList[4].ElevatorList[4].CurrentFloor);
-            Console.WriteLine("Elevator E is at floor " + ColumnList[4].ElevatorList[5].CurrentFloor);
+            Console.WriteLine("Elevator A is at floor " + ColumnList[3].ElevatorList[0].CurrentFloor);
+            Console.WriteLine("Elevator B is at floor " + ColumnList[3].ElevatorList[1].CurrentFloor);
+            Console.WriteLine("Elevator C is at floor " + ColumnList[3].ElevatorList[2].CurrentFloor);
+            Console.WriteLine("Elevator D is at floor " + ColumnList[3].ElevatorList[3].CurrentFloor);
+            Console.WriteLine("Elevator E is at floor " + ColumnList[3].ElevatorList[4].CurrentFloor);
             ColumnList[3].Start();
         }
 
@@ -197,34 +197,34 @@ namespace Corporate_Controller_CSharp
             Console.WriteLine("------------------ SEQUENCE 4 ---------------------");
             Console.WriteLine("---------------------------------------------------");
             Console.WriteLine("");
-            ColumnList[0].ElevatorList[1].CurrentFloor = -4;
+            ColumnList[0].ElevatorList[0].CurrentFloor = -4;
+            ColumnList[0].ElevatorList[0].IsStatusIdle = true;
+            ColumnList[0].ElevatorList[0].IsDirectionUp = null;
+            //--
+            ColumnList[0].ElevatorList[1].CurrentFloor = 1;
             ColumnList[0].ElevatorList[1].IsStatusIdle = true;
             ColumnList[0].ElevatorList[1].IsDirectionUp = null;
             //--
-            ColumnList[0].ElevatorList[2].CurrentFloor = 1;
-            ColumnList[0].ElevatorList[2].IsStatusIdle = true;
-            ColumnList[0].ElevatorList[2].IsDirectionUp = null;
+            ColumnList[0].ElevatorList[2].CurrentFloor = -3;
+            ColumnList[0].ElevatorList[2].IsStatusIdle = false;
+            ColumnList[0].ElevatorList[2].IsDirectionUp = false;
             //--
-            ColumnList[0].ElevatorList[3].CurrentFloor = -3;
+            ColumnList[0].ElevatorList[3].CurrentFloor = -6;
             ColumnList[0].ElevatorList[3].IsStatusIdle = false;
-            ColumnList[0].ElevatorList[3].IsDirectionUp = false;
+            ColumnList[0].ElevatorList[3].IsDirectionUp = true;
             //--
-            ColumnList[0].ElevatorList[4].CurrentFloor = -6;
+            ColumnList[0].ElevatorList[4].CurrentFloor = -1;
             ColumnList[0].ElevatorList[4].IsStatusIdle = false;
-            ColumnList[0].ElevatorList[4].IsDirectionUp = true;
-            //--
-            ColumnList[0].ElevatorList[5].CurrentFloor = -1;
-            ColumnList[0].ElevatorList[5].IsStatusIdle = false;
-            ColumnList[0].ElevatorList[5].IsDirectionUp = false;
+            ColumnList[0].ElevatorList[4].IsDirectionUp = false;
             //--
             ColumnList[0].UserActualFloor = -3;
             ColumnList[0].UserDestination = 1;
             ColumnList[0].UserDirection = "Up";
-            Console.WriteLine("Elevator A is at floor " + ColumnList[1].ElevatorList[1].CurrentFloor);
-            Console.WriteLine("Elevator B is at floor " + ColumnList[1].ElevatorList[2].CurrentFloor);
-            Console.WriteLine("Elevator C is at floor " + ColumnList[1].ElevatorList[3].CurrentFloor);
-            Console.WriteLine("Elevator D is at floor " + ColumnList[1].ElevatorList[4].CurrentFloor);
-            Console.WriteLine("Elevator E is at floor " + ColumnList[1].ElevatorList[5].CurrentFloor);
+            Console.WriteLine("Elevator A is at floor " + ColumnList[0].ElevatorList[0].CurrentFloor);
+            Console.WriteLine("Elevator B is at floor " + ColumnList[0].ElevatorList[1].CurrentFloor);
+            Console.WriteLine("Elevator C is at floor " + ColumnList[0].ElevatorList[2].CurrentFloor);
+            Console.WriteLine("Elevator D is at floor " + ColumnList[0].ElevatorList[3].CurrentFloor);
+            Console.WriteLine("Elevator E is at floor " + ColumnList[0].ElevatorList[4].CurrentFloor);
             ColumnList[0].Start();
         }
 
