@@ -24,7 +24,6 @@ namespace Corporate_Controller_CSharp
         public string UserDirection = "Up";
         public int UserDestination = 14;
         public int UserActualFloor = 3;
-        public int FindBestElevator = 2;
         public int groundFloorLevel = 1;
 
 
@@ -68,7 +67,7 @@ namespace Corporate_Controller_CSharp
                     }
                     else if (elevator.IsDirectionUp == false)
                     {
-                        if (bestScore > 8)
+                        if (bestScore > 7)
                         {
                             ChosenElevator = elevator;
                             bestScore = 8;
@@ -139,7 +138,7 @@ namespace Corporate_Controller_CSharp
 
         public void MoveDown(int UserActualFloor)
         {
-            while (UserActualFloor < ChosenElevator.CurrentFloor)
+            while (UserActualFloor < ChosenElevator.CurrentFloor )
             {
                 ChosenElevator.CurrentFloor -= 1;
                 ChosenElevator.IsStatusIdle = false;
@@ -284,22 +283,11 @@ namespace Corporate_Controller_CSharp
             // If the user is at the GroundFloor  use AssignElevator function
             // If user is at an other
 
-            /*if (UserActualFloor == ChosenElevator.CurrentFloor)
-            {
-                if (UserActualFloor < UserDestination)
-                {
-                    ElevatorMoveUp(UserDestination);
-                }
-                else if (UserActualFloor > UserDestination)
-                {
-                    ElevatorMoveDown(UserDestination);
-                }
-            }*/
-
-            if (UserActualFloor == 1) {
+            
+            if (UserActualFloor == 1 && ChosenElevator.CurrentFloor == 1) {
                 AssignElevator(UserDestination);
             }
-            else if (UserActualFloor != 1) {
+            else {
                 RequestElevator(UserActualFloor);
             }
         }

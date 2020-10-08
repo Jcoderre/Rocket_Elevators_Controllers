@@ -65,11 +65,12 @@ namespace Corporate_Controller_CSharp
             {
                 FloorList.Add(y);
             }
-
-            sequence1();
+            ////---------------- SELECT YOUR SEQUENCE -----------------//
+            //sequence1();
             //sequence2();
             //sequence3();
-            //sequence4();
+            sequence4();
+            //---------------------------------------------------------//
         }
 
         public void sequence1()
