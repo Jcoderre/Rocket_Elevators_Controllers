@@ -66,10 +66,10 @@ namespace Corporate_Controller_CSharp
                 FloorList.Add(y);
             }
             ////---------------- SELECT YOUR SEQUENCE -----------------//
-            //sequence1();
+            sequence1();
             //sequence2();
             //sequence3();
-            sequence4();
+            //sequence4();
             //---------------------------------------------------------//
         }
 

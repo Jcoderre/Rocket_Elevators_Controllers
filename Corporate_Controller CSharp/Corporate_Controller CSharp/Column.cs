@@ -277,19 +277,22 @@ namespace Corporate_Controller_CSharp
         public void Start()
         {
             Console.WriteLine("");
-            Console.WriteLine("Hello world");
+            Console.WriteLine("Welcome to Rocket Elevator Co.");
             Console.WriteLine("");
             Best_Elevator(UserActualFloor, UserDirection);
+            Console.WriteLine("---------------------------------------------------");
+            Console.WriteLine("The elevator selected is: elevator:" + ChosenElevator.Id);
+            Console.WriteLine("---------------------------------------------------");
             // If the user is at the GroundFloor  use AssignElevator function
             // If user is at an other
-
-            
             if (UserActualFloor == 1 && ChosenElevator.CurrentFloor == 1) {
                 AssignElevator(UserDestination);
+                
             }
             else {
                 RequestElevator(UserActualFloor);
             }
+            
         }
 
        
