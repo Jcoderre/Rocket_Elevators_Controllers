@@ -56,11 +56,18 @@ type Elevator struct {
 	destinationList []int
 	isStatusIdle    bool 
 	isDirectionUp   bool
+	isDoorClose     bool
 	currentFloor 	int
 	maxWeight 		int
 	actualWeight 	int
 
 }
+
+func (e *Elevatpr) changeElevatorValues(_currentFloor int, _isStatusIdle bool, _isDirectionUp bool){
+	e.currentFloor = _currentFloor
+	e.isStatusIdle = _isStatusIdle
+	e.isDirectionUp = _isDirectionUp
+
 
 //------------------------------ END ELEVATOR ------------------------------------ //
 
@@ -129,35 +136,104 @@ func (c *Column) BestElevator(userActualFloor int, UserDirection string) {
 }
 */
 //Basically a WHILE LOOP
-func (c *Column) moveUp(){
+func (c *Column) moveUp(userActualFloor) {
 	for  c.userActualFloor > c.chosenElevator.currentFloor {
-		c.chosenElevator.currentFloor += 1
+		c.chosenElevator.currentFloor++
 		c.chosenElevator.isStatusIdle = false
 		c.chosenElevator.isDirectionUp = true
 		//fmt.Println("The elevator is at floor: " + c.chosenElevator.currentFloor)
+		if c.userActualFloor ==  c.chosenElevator.currentFloor {
+			fmt.Println("----------------------")
+			fmt.Println("Arrived at destination")
+			fmt.Println("")
+			fmt.Println("Open Door")
+			DoorOpening();
+			fmt.Println("Close Door")
+		}
 	}
-	fmt.Println("----------------------")
-	fmt.Println("Arrived at destination")
-	fmt.Println("")
-	fmt.Println("Open Door")
-	DoorOpening();
-	fmt.Println("Close Door")
+
 }
 
-func (c *Column) moveDown(){
+func (c *Column) moveDown(userActualFloor) {
 	for  c.userActualFloor > c.chosenElevator.currentFloor {
-		c.chosenElevator.currentFloor -= 1
+		c.chosenElevator.currentFloor--
 		c.chosenElevator.isStatusIdle = false
 		c.chosenElevator.isDirectionUp = false
-		//fmt.Println("The elevator is at floor: " + c.chosenElevator.currentFloor)
+		//fmt.Println("The elevator is at floor: " + chosenElevator.currentFloor)
+		if c.userActualFloor ==  c.chosenElevator.currentFloor {
+			fmt.Println("----------------------")
+			fmt.Println("Arrived at destination")  
+			fmt.Println("")
+			fmt.Println("Open Door")
+			DoorOpening();
+			fmt.Println("Close Door")
+		}
 	}
-	fmt.Println("----------------------")
-	fmt.Println("Arrived at destination")  
-	fmt.Println("")
-	fmt.Println("Open Door")
-	DoorOpening();
-	fmt.Println("Close Door")
+
 }
+
+func (c *Column) elevatorMoveUp(userDestination) {
+	for  c.userDestination > c.chosenElevator.currentFloor {
+		c.chosenElevator.currentFloor++
+		c.chosenElevator.isStatusIdle = false
+		c.chosenElevator.isDirectionUp = true
+		//fmt.Println("The elevator is at floor: " + c.chosenElevator.currentFloor)
+		if c.userDestination ==  c.chosenElevator.currentFloor {
+			fmt.Println("----------------------")
+			fmt.Println("Arrived at destination")
+			fmt.Println("")
+			fmt.Println("Open Door")
+			DoorOpening();
+			fmt.Println("Close Door")
+		}
+	}
+
+}
+
+func (c *Column) elevatorMoveDown(UserDestination) {
+	for  c.userDestination > c.chosenElevator.currentFloor {
+		c.chosenElevator.currentFloor--
+		c.chosenElevator.isStatusIdle = false
+		c.chosenElevator.isDirectionUp = false
+		//fmt.Println("The elevator is at floor: " + chosenElevator.currentFloor)
+		if c.userDestination ==  c.chosenElevator.currentFloor {
+			fmt.Println("----------------------")
+			fmt.Println("Arrived at destination")  
+			fmt.Println("")
+			fmt.Println("Open Door")
+			DoorOpening();
+			fmt.Println("Close Door")
+		}
+	}
+
+}
+
+func (c *Column) requestElevator(userActualFloor) {
+	c.chosenElevator.elevatorQueue = append(UserActualFloor)
+	if c.userActualFloor > c.chosenElevator.currentFloor {
+		c.chosenElevator.isDoorClose = true
+		c.chosenElevator.isDirectionUp = true
+		moveUp(UserActualFloor)
+	} else if c.userActualFloor < c.chosenElevator.currentFloor {
+		c.chosenElevator.isDoorClose = true
+		c.chosenElevator.isDirectionUp = true
+		elevatorMoveUp(userDestination)
+	}
+}
+
+func (c *Column) assignElevator(userDestination) {
+	c.chosenElevator.destinationList = append(userDestination)
+	if c.userDestination > c.groundFloorLevel {
+		c.chosenElevator.isDoorClose = true
+		c.chosenElevator.isDirectionUp = true
+		moveUp(UserActualFloor)
+	} else if c.userDestination < c.groundFloorLevel {
+		c.chosenElevator.isDoorClose = true
+		c.chosenElevator.isDirectionUp = true
+		elevatorMoveDown(UserDestination)
+	}
+}
+
 
 
 //------------------------------ END COLUMN ------------------------------------ //
@@ -175,13 +251,13 @@ type Battery struct {
 
 	
 }
-/*
+
 func (b *Battery) createColumn(amountOfColumn int){
 	for i := 0; i < amountOfColumn +1 ; i++ {
 		b.columnList = append(b.columnList, Column{i+1, -6, 59, 66, true, []Elevator{}})
 	}
 }
-
+/*
 func (b *Battery) createCallbutton(){
 	for j := -6; j < b.floorAmount; j++ {
 		if j > 0 {
@@ -195,8 +271,8 @@ func (b *Battery) createCallbutton(){
 */
 //------------------------------ END Battery ------------------------------------ //
 
-
-func  DoorClosing() {
+// Print Display of Door Closing
+func  DoorClosing(){
         
 fmt.Println("");
 fmt.Println("_____  _____");
@@ -211,6 +287,7 @@ fmt.Println("|___|  |___|");
 fmt.Println("");
 }
 
+// Print Display of Door Opening 
 func DoorOpening() {
 		
 fmt.Println("");
@@ -226,8 +303,110 @@ fmt.Println("|___|  |___|");
 fmt.Println("");
 }
 
+func start() {
+
+}
+
+/*
+func sequence1() {
+	fmt.Println("");
+	fmt.Println("");
+	fmt.Println("---------------------------------------------------");
+	fmt.Println("------------------ SEQUENCE 1 ---------------------");
+	fmt.Println("---------------------------------------------------");
+	fmt.Println("");
+	b.columnList[1].elevatorList[0].changeElevatorValues(20, false, false)
+	//--
+	b.columnList[1].elevatorList[1].changeElevatorValues(3, false, true)
+	//--
+	b.columnList[1].ElevatorList[2].changeElevatorValues(13, false, false)
+	//--
+	b.columnList[1].ElevatorList[3].changeElevatorValues(15, false, false)
+	//--
+	b.columnList[1].ElevatorList[4].changeElevatorValues(6, false, false)
+	//--
+	b.columnList[1].UserDirection = "Up";
+	b.columnList[1].UserActualFloor = 1;
+	b.columnList[1].UserDestination = 20;
+	start()
+}
+
+func sequence2() {
+	fmt.Println("");
+	fmt.Println("");
+	fmt.Println("---------------------------------------------------");
+	fmt.Println("------------------ SEQUENCE 2 ---------------------");
+	fmt.Println("---------------------------------------------------");
+	fmt.Println("");
+	b.columnList[2].ElevatorList[0].changeElevatorValues(1, true, null)
+	//--
+	b.columnList[2].ElevatorList[1].changeElevatorValues(23, false, true)
+	//--
+	b.columnList[2].ElevatorList[2].changeElevatorValues(33, false, false)
+	//--
+	b.columnList[2].ElevatorList[3].changeElevatorValues(40, false, false)
+	//--
+	b.columnList[2].ElevatorList[4].changeElevatorValues(39, false, false)
+	//--
+	b.columnList[2].UserActualFloor = 1;
+	b.columnList[2].UserDestination = 36;
+	b.columnList[2].UserDirection = "Up";
+	start()
+}
+
+func sequence3() {
+	fmt.Println("");
+	fmt.Println("");
+	fmt.Println("---------------------------------------------------");
+	fmt.Println("------------------ SEQUENCE 3 ---------------------");
+	fmt.Println("---------------------------------------------------");
+	fmt.Println("");
+	b.columnList[3].ElevatorList[0].changeElevatorValues(58, false, false)
+	//--
+	b.columnList[3].ElevatorList[1].changeElevatorValues(50, false, true)
+	//--
+	b.columnList[3].ElevatorList[2].changeElevatorValues(46, false, true)
+	//--
+	b.columnList[3].ElevatorList[3].changeElevatorValues(1, false, true)
+	//--
+	b.columnList[3].ElevatorList[4].changeElevatorValues(60, false, false)
+	//--
+	b.columnList[3].UserActualFloor = 54;
+	b.columnList[3].UserDestination = 1;
+	b.columnList[3].UserDirection = "Down";
+	start()
+}
+
+func sequence4() {
+	fmt.Println("");
+	fmt.Println("");
+	fmt.Println("---------------------------------------------------");
+	fmt.Println("------------------ SEQUENCE 4 ---------------------");
+	fmt.Println("---------------------------------------------------");
+	fmt.Println("");
+	b.columnList[0].ElevatorList[0].changeElevatorValues(-4, true, null)
+	//--
+	b.columnList[0].ElevatorList[1].changeElevatorValues(1, true, null)
+	//--
+	b.columnList[0].ElevatorList[2].changeElevatorValues(-3, false, false)
+	//--
+	b.columnList[0].ElevatorList[3].changeElevatorValues(-6, false, true)
+	//--
+	b.columnList[0].ElevatorList[4].changeElevatorValues(-1, false, false) 
+	//--
+	b.columnList[0].UserActualFloor = -3;
+	b.columnList[0].UserDestination = 1;
+	b.columnList[0].UserDirection = "Up";
+	start()
+}
+*/
+
 
 func main() {
 	fmt.Println("Hello World")
 
+	//sequence1()
+	//sequence2()
+	//sequence3()
+	//sequence4()
 }
