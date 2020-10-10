@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace Corporate_Controller_CSharp
 {
     public class Elevator
-    {
+    {   // Creating the class Elevator
         public int Id;
         public List<int> ElevatorQueue = new List<int>();       // Unordered set of floor request
         public List<int> DestinationList = new List<int>();   // Array of Requested Buttons

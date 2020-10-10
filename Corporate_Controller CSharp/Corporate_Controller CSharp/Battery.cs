@@ -6,7 +6,7 @@ using System.Text;
 namespace Corporate_Controller_CSharp
 {
     public class Battery 
-    {
+    {   // Creating the class Battery
         public List<Callbutton> CallButtonList = new List<Callbutton>();
         public List<int> ReceptionCallButton = new List<int>();
         public static List<Column> ColumnList = new List<Column>();

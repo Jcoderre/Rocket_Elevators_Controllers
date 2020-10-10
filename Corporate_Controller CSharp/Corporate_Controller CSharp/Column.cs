@@ -11,7 +11,7 @@ using static Corporate_Controller_CSharp.Battery; */
 
 namespace Corporate_Controller_CSharp
 {
-
+    // Creating Column
     public class Column
     {
         public int Id;
@@ -166,6 +166,10 @@ namespace Corporate_Controller_CSharp
                 ChosenElevator.IsStatusIdle = false;
                 Console.WriteLine("The elevator is at floor: " + ChosenElevator.CurrentFloor);
                 ChosenElevator.IsDirectionUp = true;
+                if (ChosenElevator.CurrentFloor == -1)
+                {
+                    ChosenElevator.CurrentFloor = 0;
+                }
                 if (UserDestination == ChosenElevator.CurrentFloor)
                 {
                     Console.WriteLine("----------------------");
@@ -188,6 +192,10 @@ namespace Corporate_Controller_CSharp
                 ChosenElevator.IsStatusIdle = false;
                 Console.WriteLine("The elevator is at floor: " + ChosenElevator.CurrentFloor);
                 ChosenElevator.IsDirectionUp = false;
+                if (ChosenElevator.CurrentFloor == 1)
+                {
+                    ChosenElevator.CurrentFloor = -1;
+                }
                 if (UserDestination == ChosenElevator.CurrentFloor)
                 {
                     Console.WriteLine("----------------------");
@@ -216,7 +224,7 @@ namespace Corporate_Controller_CSharp
             else if (UserActualFloor < ChosenElevator.CurrentFloor)
             {
                 ChosenElevator.IsDoorsClose = true;
-                ChosenElevator.IsDirectionUp = true;
+                ChosenElevator.IsDirectionUp = false;
                 MoveDown(UserActualFloor);
             }
         }
@@ -225,20 +233,17 @@ namespace Corporate_Controller_CSharp
 
         public void AssignElevator(int UserDestination)
         {
-            
             ChosenElevator.DestinationList.Add(UserDestination);
-            if (UserDestination > groundFloorLevel)
+            if (UserDirection == "Up")
             {
-                UserDirection = "Up";
                 ChosenElevator.IsDoorsClose = true;
                 ChosenElevator.IsDirectionUp = true;
                 ElevatorMoveUp(UserDestination);
             }
-            else if (UserDestination < groundFloorLevel)
+            else if (UserDirection == "Down")
             {
-                UserDirection = "Down";
                 ChosenElevator.IsDoorsClose = true;
-                ChosenElevator.IsDirectionUp = true;
+                ChosenElevator.IsDirectionUp = false;
                 ElevatorMoveDown(UserDestination);
             }
         }
@@ -270,7 +275,7 @@ namespace Corporate_Controller_CSharp
             Console.WriteLine("|-->|  |<--|");
             Console.WriteLine("|-->|  |<--|");
             Console.WriteLine("|___|  |___|");
-            Console.WriteLine("");
+            Console.WriteLine(""); 
         }
 
 
@@ -284,14 +289,9 @@ namespace Corporate_Controller_CSharp
             Console.WriteLine("The elevator selected is: elevator:" + ChosenElevator.Id);
             Console.WriteLine("---------------------------------------------------");
             // If the user is at the GroundFloor  use AssignElevator function
-            // If user is at an other
-            if (UserActualFloor == 1 && ChosenElevator.CurrentFloor == 1) {
-                AssignElevator(UserDestination);
-                
-            }
-            else {
-                RequestElevator(UserActualFloor);
-            }
+            // If user is at an other floor use Request Elevator
+            RequestElevator(UserActualFloor);
+            AssignElevator(UserDestination);
             
         }
 
