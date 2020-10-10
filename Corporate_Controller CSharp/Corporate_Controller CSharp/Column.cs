@@ -49,7 +49,10 @@ namespace Corporate_Controller_CSharp
 
             
         }
-
+        // THE BEST ELEVATOR IS DEFINE BY CHOOSING IF YOUR ELEVATOR GOES UP OR DOWN
+        // THAN MAKE A SELECT OF BOOLEAN STATEMENT WHERE IF YOUR ELEVATOR GOES UP OR DOWN
+        // OR IF THE ELEVATOR IS IDLE THAN WITH THE SCORE HE WAS GIVEN BY DOES CONDITION THE BEST ELEVATOR IS CHOSEN
+        // CALLED IN THE START FUNCTION
         public void Best_Elevator(int UserActualFloor, string UserDirection)
         {
             var bestScore = 10;
@@ -113,16 +116,16 @@ namespace Corporate_Controller_CSharp
         }
 
 
-
+        // (MOVEUP) AND (MOVEDOWN) ARE CALLED IN (REQUESTELEVATOR) FUNCTION
         public void MoveUp(int UserActualFloor)
         {
-            while (UserActualFloor > ChosenElevator.CurrentFloor)
+            while (UserActualFloor > ChosenElevator.CurrentFloor)       // WHILE THE FLOOR OF THE USER IS BIGGER THAN THAN THE ELEVATOR CURRENT FLOOR
             {
-                ChosenElevator.CurrentFloor += 1;
-                ChosenElevator.IsStatusIdle = false;
+                ChosenElevator.CurrentFloor += 1;                       // INCREMENT BY ONE 
+                ChosenElevator.IsStatusIdle = false;                    // PUT ELEVATOR STATUS TO MOVING
                 Console.WriteLine("The elevator is at floor: " + ChosenElevator.CurrentFloor);
-                ChosenElevator.IsDirectionUp = true;
-                if (UserActualFloor == ChosenElevator.CurrentFloor)
+                ChosenElevator.IsDirectionUp = true;                    // PUT ELEVATOR MOVING  STATUS TO UP
+                if (UserActualFloor == ChosenElevator.CurrentFloor)     // IF THE THE ACTUAL FLOOR OF USER IS EQUAL TO ELEVATOR FLOOR STOP LOOPING
                 {
                     Console.WriteLine("----------------------");
                     Console.WriteLine("Arrived at destination");
@@ -138,13 +141,41 @@ namespace Corporate_Controller_CSharp
 
         public void MoveDown(int UserActualFloor)
         {
-            while (UserActualFloor < ChosenElevator.CurrentFloor )
+            while (UserActualFloor < ChosenElevator.CurrentFloor)       // WHILE THE FLOOR OF THE USER IS SMALLER THAN THAN THE ELEVATOR CURRENT FLOOR
             {
-                ChosenElevator.CurrentFloor -= 1;
-                ChosenElevator.IsStatusIdle = false;
+                 ChosenElevator.CurrentFloor -= 1;                      // DECREMENT BY ONE     
+                ChosenElevator.IsStatusIdle = false;                    // PUT ELEVATOR STATUS TO MOVING
                 Console.WriteLine("The elevator is at floor: " + ChosenElevator.CurrentFloor);
-                ChosenElevator.IsDirectionUp = false;
-                if (UserActualFloor == ChosenElevator.CurrentFloor)
+                ChosenElevator.IsDirectionUp = false;                   // PUT ELEVATOR MOVING  STATUS TO DOWN
+                if (UserActualFloor == ChosenElevator.CurrentFloor)     // IF THE THE ACTUAL FLOOR OF USER IS EQUAL TO ELEVATOR FLOOR STOP LOOPING
+                {
+                    
+                    Console.WriteLine("----------------------");
+                    Console.WriteLine("Arrived at destination");
+                    Console.WriteLine("");
+                    Console.WriteLine("Open Door");
+                    DoorOpening();
+                    Console.WriteLine("Close Door");
+                    DoorClosing();
+
+                }
+            }
+        }
+
+        // (ELEVATORMOVEUP) AND (ELEVATORMOVEDOWN) ARE CALLED IN THE (ASSIGNELEVATOR) FUNCTION
+        public void ElevatorMoveUp(int UserDestination)
+        {
+            while (UserDestination > ChosenElevator.CurrentFloor)       // WHILE THE FLOOR OF THE USER IS BIGGER THAN THAN THE ELEVATOR CURRENT FLOOR
+            {
+                ChosenElevator.CurrentFloor += 1;                       // INCREMENT BY ONE 
+                ChosenElevator.IsStatusIdle = false;                    // PUT ELEVATOR STATUS TO MOVING
+                Console.WriteLine("The elevator is at floor: " + ChosenElevator.CurrentFloor);
+                ChosenElevator.IsDirectionUp = true;                    // PUT ELEVATOR MOVING  STATUS TO UP
+                if (ChosenElevator.CurrentFloor == -1)                  
+                {
+                    ChosenElevator.CurrentFloor = 0;
+                }
+                if (UserDestination == ChosenElevator.CurrentFloor)       // IF THE THE ACTUAL FLOOR OF USER IS EQUAL TO ELEVATOR FLOOR STOP LOOPING  
                 {
                     Console.WriteLine("----------------------");
                     Console.WriteLine("Arrived at destination");
@@ -158,15 +189,15 @@ namespace Corporate_Controller_CSharp
             }
         }
 
-        public void ElevatorMoveUp(int UserDestination)
+        public void ElevatorMoveDown(int UserDestination)           
         {
-            while (UserDestination > ChosenElevator.CurrentFloor)
+            while (UserDestination < ChosenElevator.CurrentFloor)           // WHILE THE FLOOR OF THE USER IS BIGGER THAN THAN THE ELEVATOR CURRENT FLOOR
             {
-                ChosenElevator.CurrentFloor += 1;
-                ChosenElevator.IsStatusIdle = false;
+                ChosenElevator.CurrentFloor -= 1;                           // DECREMENT BY ONE     
+                ChosenElevator.IsStatusIdle = false;                        // PUT ELEVATOR STATUS TO MOVING
                 Console.WriteLine("The elevator is at floor: " + ChosenElevator.CurrentFloor);
-                ChosenElevator.IsDirectionUp = true;
-                if (ChosenElevator.CurrentFloor == -1)
+                ChosenElevator.IsDirectionUp = false;                       // PUT ELEVATOR MOVING  STATUS TO DOWN
+                if (ChosenElevator.CurrentFloor == 1)                       // IF THE THE ACTUAL FLOOR OF USER IS EQUAL TO ELEVATOR FLOOR STOP LOOPING
                 {
                     ChosenElevator.CurrentFloor = 0;
                 }
@@ -184,70 +215,45 @@ namespace Corporate_Controller_CSharp
             }
         }
 
-        public void ElevatorMoveDown(int UserDestination)
-        {
-            while (UserDestination < ChosenElevator.CurrentFloor)
-            {
-                ChosenElevator.CurrentFloor -= 1;
-                ChosenElevator.IsStatusIdle = false;
-                Console.WriteLine("The elevator is at floor: " + ChosenElevator.CurrentFloor);
-                ChosenElevator.IsDirectionUp = false;
-                if (ChosenElevator.CurrentFloor == 1)
-                {
-                    ChosenElevator.CurrentFloor = -1;
-                }
-                if (UserDestination == ChosenElevator.CurrentFloor)
-                {
-                    Console.WriteLine("----------------------");
-                    Console.WriteLine("Arrived at destination");
-                    Console.WriteLine("");
-                    Console.WriteLine("Open Door");
-                    DoorOpening();
-                    Console.WriteLine("Close Door");
-                    DoorClosing();
-
-                }
-            }
-        }
-
         //This method represents an elevator request on a floor or basement.
-
+        // CALLED IN FUNCTION START
         public void RequestElevator(int UserActualFloor)
         {
-            ChosenElevator.ElevatorQueue.Add(UserActualFloor);
-            if (UserActualFloor > ChosenElevator.CurrentFloor)
+            ChosenElevator.ElevatorQueue.Add(UserActualFloor);      //  ADD FLOOR OF USER TO THE QUEUE OF ELEVATOR
+            if (UserActualFloor > ChosenElevator.CurrentFloor)      // IF USER FLOOR BIGGER THAN CURRENT FLOOR OF ELEVATOR DO THIS..
             {
-                ChosenElevator.IsDoorsClose = true;
-                ChosenElevator.IsDirectionUp = true;
-                MoveUp(UserActualFloor);
+                ChosenElevator.IsDoorsClose = true;                 // SET DOOR TO CLOSE
+                ChosenElevator.IsDirectionUp = true;                // SET DIRECTION TO UP
+                MoveUp(UserActualFloor);                            // START FUNCTION MOVE UP
             }
-            else if (UserActualFloor < ChosenElevator.CurrentFloor)
+            else if (UserActualFloor < ChosenElevator.CurrentFloor) // IF USER FLOOR SMALLER THAN CURRENT FLOOR OF ELEVATOR 
             {
-                ChosenElevator.IsDoorsClose = true;
-                ChosenElevator.IsDirectionUp = false;
-                MoveDown(UserActualFloor);
+                ChosenElevator.IsDoorsClose = true;                 // SET DOOR TO CLOSE
+                ChosenElevator.IsDirectionUp = false;               // SET DIRECTION TO DOWN
+                MoveDown(UserActualFloor);                          // START FUNCTION MOVE DOWN
             }
         }
 
         //This method will be used for the requests made on the first floor.
-
+        // CALLED IN FUNCTION START
         public void AssignElevator(int UserDestination)
         {
-            ChosenElevator.DestinationList.Add(UserDestination);
-            if (UserDirection == "Up")
+            ChosenElevator.DestinationList.Add(UserDestination);        //  ADD FLOOR OF USER TO THE QUEUE OF ELEVATOR
+            if (UserDirection == "Up")                                  // IF USER DIRECTION IS UP DO THIS ..
             {
-                ChosenElevator.IsDoorsClose = true;
-                ChosenElevator.IsDirectionUp = true;
-                ElevatorMoveUp(UserDestination);
+                ChosenElevator.IsDoorsClose = true;                     // SET DOOR CLOSE
+                ChosenElevator.IsDirectionUp = true;                    // SET DIRECTION TO UP
+                ElevatorMoveUp(UserDestination);                        // START FUNCTION ELEVATOR MOVE UP
             }
-            else if (UserDirection == "Down")
+            else if (UserDirection == "Down")                           // IF USER DIRECTION IS DOWN DO THIS ..
             {
-                ChosenElevator.IsDoorsClose = true;
-                ChosenElevator.IsDirectionUp = false;
-                ElevatorMoveDown(UserDestination);
+                ChosenElevator.IsDoorsClose = true;                     // SET DOOR TO CLOSE
+                ChosenElevator.IsDirectionUp = false;                   // SET DIRECTION TO DOWN
+                ElevatorMoveDown(UserDestination);                      // START FUNCTION MOVE DOWN
             }
         }
-
+        // SHOW OFF FUNCTION TO DISPLAY OPEN DOORS OR CLOSING DOORS OF ELEVATOR
+        // CALLED IN FUNCTION ASSIGN ELEVATOR  AND   REQUEST ELEVATOR
         public void DoorClosing()
         {
             Console.WriteLine("");

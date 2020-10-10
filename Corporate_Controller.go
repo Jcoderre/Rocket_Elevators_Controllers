@@ -40,7 +40,7 @@ import (
 )
 
 // CallButton ...
-type CallButton struct {
+type CallButton struct { //Creating the class CallButton
 	callButtonDirection []int
 	callButtonFloor     []int
 }
@@ -48,7 +48,7 @@ type CallButton struct {
 //------------------------------ END CALLBUTTON ------------------------------------ //
 
 // Elevator ...
-type Elevator struct {
+type Elevator struct { // Creating the class Elevator
 	id              int
 	elevatorQueue   []int
 	destinationList []int
@@ -69,7 +69,7 @@ func (e *Elevator) changeElevatorValues(_currentFloor int, _isStatusIdle bool, _
 //------------------------------ END ELEVATOR ------------------------------------ //
 
 // Column ...
-type Column struct {
+type Column struct { // Creating  the class Column
 	id               int
 	minFloor         int
 	maxFloor         int
@@ -83,20 +83,27 @@ type Column struct {
 	groundFloorLevel int
 }
 
+// CREATING A FUNCTION TO CHANGE VALUES FOR THE SEQUENCE AT THE END
+// CALLED IN THE MAIN FUNCTION
 func (c *Column) changeUserValues(_userDirection string, _userActualFloor int, _userDestination int) {
 	c.userDirection = _userDirection
 	c.userActualFloor = _userActualFloor
 	c.userDestination = _userDestination
 }
 
+// CREATING AN ELEVATOR LIST FOR THE NUMBER OF ELEVATOR NEEDED BY COLUMN
 func (c *Column) createElevator(elevatorAmountPerColumn int) {
-	for i := 0; i < elevatorAmountPerColumn; i++ {
-		c.elevatorList = append(c.elevatorList, Elevator{i + 1, []int{}, []int{}, true, "", true, 1, 2500, 0})
+	for i := 0; i < elevatorAmountPerColumn; i++ { // FOR EACH VARIABLE WHEN THE VARIABLE IS LESS THAN THE NUMBER OF ELEVATOR PER COLUMN INCREMENT BY ONE
+		c.elevatorList = append(c.elevatorList, Elevator{i + 1, []int{}, []int{}, true, "", true, 1, 2500, 0}) // ADD THIS LIST TO ELEVATOR LIST
 	}
 }
 
 // BestElevator ...
 // Basically a FOREACH LOOP
+// THE BEST ELEVATOR IS DEFINE BY CHOOSING IF YOUR ELEVATOR GOES UP OR DOWN
+// THAN MAKE A SELECT OF BOOLEAN STATEMENT WHERE IF YOUR ELEVATOR GOES UP OR DOWN
+// OR IF THE ELEVATOR IS IDLE THAN WITH THE SCORE HE WAS GIVEN BY DOES CONDITION THE BEST ELEVATOR IS CHOSEN
+// CALLED IN THE START FUNCTION
 func (c *Column) BestElevator(userActualFloor int, UserDirection string) {
 	bestScore := 10
 	for _, elevator := range c.elevatorList { // For each Elevator in Elevator list loop inside the function
@@ -139,13 +146,14 @@ func (c *Column) BestElevator(userActualFloor int, UserDirection string) {
 }
 
 //Basically a WHILE LOOP
+// (MOVEUP) AND (MOVEDOWN) ARE CALLED IN (REQUESTELEVATOR) FUNCTION
 func (c *Column) moveUp(userActualFloor int) {
-	for c.userActualFloor > c.chosenElevator.currentFloor {
-		c.chosenElevator.currentFloor++
-		c.chosenElevator.isStatusIdle = false
-		c.chosenElevator.isDirectionUp = "Up"
+	for c.userActualFloor > c.chosenElevator.currentFloor { // WHILE THE FLOOR OF THE USER IS BIGGER THAN THAN THE ELEVATOR CURRENT FLOOR
+		c.chosenElevator.currentFloor++       // INCREMENT BY ONE
+		c.chosenElevator.isStatusIdle = false // PUT ELEVATOR STATUS TO MOVING
+		c.chosenElevator.isDirectionUp = "Up" // PUT ELEVATOR MOVING  STATUS TO UP
 		fmt.Println("The elevator is at floor: ", c.chosenElevator.currentFloor)
-		if c.userActualFloor == c.chosenElevator.currentFloor {
+		if c.userActualFloor == c.chosenElevator.currentFloor { // IF THE THE ACTUAL FLOOR OF USER IS EQUAL TO ELEVATOR FLOOR STOP LOOPING
 			fmt.Println("----------------------")
 			fmt.Println("Arrived at destination")
 			fmt.Println("")
@@ -158,12 +166,12 @@ func (c *Column) moveUp(userActualFloor int) {
 }
 
 func (c *Column) moveDown(userActualFloor int) {
-	for c.userActualFloor < c.chosenElevator.currentFloor {
-		c.chosenElevator.currentFloor--
-		c.chosenElevator.isStatusIdle = false
-		c.chosenElevator.isDirectionUp = "Down"
+	for c.userActualFloor < c.chosenElevator.currentFloor { // WHILE THE FLOOR OF THE USER IS SMALLER THAN THAN THE ELEVATOR CURRENT FLOOR
+		c.chosenElevator.currentFloor--         // DECREMENT BY ONE
+		c.chosenElevator.isStatusIdle = false   // PUT ELEVATOR STATUS TO MOVING
+		c.chosenElevator.isDirectionUp = "Down" // PUT ELEVATOR MOVING  STATUS TO DOWN
 		fmt.Println("The elevator is at floor: ", c.chosenElevator.currentFloor)
-		if c.userActualFloor == c.chosenElevator.currentFloor {
+		if c.userActualFloor == c.chosenElevator.currentFloor { // IF THE THE ACTUAL FLOOR OF USER IS EQUAL TO ELEVATOR FLOOR STOP LOOPING
 			fmt.Println("----------------------")
 			fmt.Println("Arrived at destination")
 			fmt.Println("")
@@ -175,13 +183,17 @@ func (c *Column) moveDown(userActualFloor int) {
 	}
 }
 
+// (ELEVATORMOVEUP) AND (ELEVATORMOVEDOWN) ARE CALLED IN THE (ASSIGNELEVATOR) FUNCTION
 func (c *Column) elevatorMoveUp(userDestination int) {
-	for c.userDestination > c.chosenElevator.currentFloor {
-		c.chosenElevator.currentFloor++
-		c.chosenElevator.isStatusIdle = false
-		c.chosenElevator.isDirectionUp = "Up"
+	for c.userDestination > c.chosenElevator.currentFloor { // WHILE THE FLOOR OF THE USER IS BIGGER THAN THAN THE ELEVATOR CURRENT FLOOR
+		c.chosenElevator.currentFloor++       // INCREMENT BY ONE
+		c.chosenElevator.isStatusIdle = false // PUT ELEVATOR STATUS TO MOVING
+		c.chosenElevator.isDirectionUp = "Up" // PUT ELEVATOR MOVING  STATUS TO UP
 		fmt.Println("The elevator is at floor: ", c.chosenElevator.currentFloor)
-		if c.userDestination == c.chosenElevator.currentFloor {
+		if c.chosenElevator.currentFloor == -1 {
+			c.chosenElevator.currentFloor = 0
+		}
+		if c.userDestination == c.chosenElevator.currentFloor { // IF THE THE ACTUAL FLOOR OF USER IS EQUAL TO ELEVATOR FLOOR STOP LOOPING
 			fmt.Println("----------------------")
 			fmt.Println("Arrived at destination")
 			fmt.Println("")
@@ -194,12 +206,15 @@ func (c *Column) elevatorMoveUp(userDestination int) {
 }
 
 func (c *Column) elevatorMoveDown(UserDestination int) {
-	for c.userDestination < c.chosenElevator.currentFloor {
-		c.chosenElevator.currentFloor--
-		c.chosenElevator.isStatusIdle = false
-		c.chosenElevator.isDirectionUp = "Down"
+	for c.userDestination < c.chosenElevator.currentFloor { // WHILE THE FLOOR OF THE USER IS BIGGER THAN THAN THE ELEVATOR CURRENT FLOOR
+		c.chosenElevator.currentFloor--         // DECREMENT BY ONE
+		c.chosenElevator.isStatusIdle = false   // PUT ELEVATOR STATUS TO MOVING
+		c.chosenElevator.isDirectionUp = "Down" // PUT ELEVATOR MOVING  STATUS TO DOWN
+		if c.chosenElevator.currentFloor == 1 {
+			c.chosenElevator.currentFloor = 0
+		}
 		fmt.Println("The elevator is at floor: ", c.chosenElevator.currentFloor)
-		if c.userDestination == c.chosenElevator.currentFloor {
+		if c.userDestination == c.chosenElevator.currentFloor { // IF THE THE ACTUAL FLOOR OF USER IS EQUAL TO ELEVATOR FLOOR STOP LOOPING
 			fmt.Println("----------------------")
 			fmt.Println("Arrived at destination")
 			fmt.Println("")
@@ -211,27 +226,42 @@ func (c *Column) elevatorMoveDown(UserDestination int) {
 	}
 }
 
-func (c *Column) requestElevator(userActualFloor int) {
-	c.chosenElevator.elevatorQueue = append(c.chosenElevator.elevatorQueue, userActualFloor)
-	if c.userActualFloor > c.chosenElevator.currentFloor {
-		c.chosenElevator.isDoorClose = true
-		c.chosenElevator.isDirectionUp = "Up"
-		c.moveUp(userActualFloor)
-	} else if c.userActualFloor < c.chosenElevator.currentFloor {
-		c.chosenElevator.isDoorClose = true
-		c.chosenElevator.isDirectionUp = "Down"
-		c.moveDown(userActualFloor)
+//This method represents an elevator request on a floor or basement.
+// CALLED IN FUNCTION START
+func (c *Column) requestElevator(userActualFloor int, userDestination int) {
+	c.chosenElevator.elevatorQueue = append(c.chosenElevator.elevatorQueue, userActualFloor) // ADD FLOOR OF USER TO THE QUEUE OF ELEVATOR
+	if c.userActualFloor > c.chosenElevator.currentFloor {                                   // IF USER FLOOR BIGGER THAN CURRENT FLOOR OF ELEVATOR DO THIS..
+		c.chosenElevator.isDoorClose = true   // SET DOOR TO CLOSE
+		c.chosenElevator.isDirectionUp = "Up" // SET DIRECTION TO UP
+		c.moveUp(userActualFloor)             // START FUNCTION MOVE UP
+	} else if c.userActualFloor < c.chosenElevator.currentFloor { // IF USER FLOOR SMALLER THAN CURRENT FLOOR OF ELEVATOR
+		c.chosenElevator.isDoorClose = true     // SET DOOR TO CLOSE
+		c.chosenElevator.isDirectionUp = "Down" // SET DIRECTION TO DOWN
+		c.moveDown(userActualFloor)             // START FUNCTION MOVE DOWN
 	}
+	if c.userDestination > c.groundFloorLevel { // IF USER DIRECTION IS UP DO THIS ..
+		c.chosenElevator.isDoorClose = true   // SET DOOR CLOSE
+		c.chosenElevator.isDirectionUp = "Up" // SET DIRECTION TO UP
+		c.elevatorMoveUp(userDestination)     // START FUNCTION ELEVATOR MOVE UP
+	} else if c.userDestination < c.groundFloorLevel { // IF USER DIRECTION IS DOWN DO THIS ..
+		c.chosenElevator.isDoorClose = true // SET DOOR TO CLOSE
+		c.chosenElevator.isDirectionUp = "Down"
+		c.elevatorMoveDown(userDestination)
+
+	}
+
 }
 
+//This method will be used for the requests made on the first floor.
+// CALLED IN FUNCTION START
 func (c *Column) assignElevator(userDestination int) {
-	c.chosenElevator.destinationList = append(c.chosenElevator.destinationList, userDestination)
-	if c.userDestination > c.groundFloorLevel {
-		c.chosenElevator.isDoorClose = true
-		c.chosenElevator.isDirectionUp = "Up"
-		c.elevatorMoveUp(userDestination)
-	} else if c.userDestination < c.groundFloorLevel {
-		c.chosenElevator.isDoorClose = true
+	c.chosenElevator.destinationList = append(c.chosenElevator.destinationList, userDestination) // ADD FLOOR OF USER TO THE QUEUE OF ELEVATOR
+	if c.userDestination > c.groundFloorLevel {                                                  // IF USER DIRECTION IS UP DO THIS ..
+		c.chosenElevator.isDoorClose = true   // SET DOOR CLOSE
+		c.chosenElevator.isDirectionUp = "Up" // SET DIRECTION TO UP
+		c.elevatorMoveUp(userDestination)     // START FUNCTION ELEVATOR MOVE UP
+	} else if c.userDestination < c.groundFloorLevel { // IF USER DIRECTION IS DOWN DO THIS ..
+		c.chosenElevator.isDoorClose = true // SET DOOR TO CLOSE
 		c.chosenElevator.isDirectionUp = "Down"
 		c.elevatorMoveDown(userDestination)
 	}
@@ -241,7 +271,7 @@ func (c *Column) assignElevator(userDestination int) {
 
 // Battery ...
 // TYPE of the object Battery
-type Battery struct {
+type Battery struct { // Creating the class Battery
 	minFloor       int
 	maxFloor       int
 	floorAmount    int
@@ -249,6 +279,8 @@ type Battery struct {
 	columnList     []Column
 }
 
+// Creating the Number of Column Needed for the building
+// The Column generate in this case Five elevator each of them create in the column section
 func (b *Battery) createBattery(amountOfColumn int, minFloor int, maxFloor int) {
 	for i := 0; i < amountOfColumn+1; i++ {
 		b.columnList = append(b.columnList, Column{i + 1, -6, 59, 66, true, []Elevator{}, Elevator{}, "", 0, 0, 0})
@@ -262,8 +294,8 @@ func DoorClosing() {
 	fmt.Println("")
 	fmt.Println("_____  _____")
 	fmt.Println("|<--|  |-->|")
-	fmt.Println("|<--|  |-->|")
-	fmt.Println("|<--|  |-->|")
+	fmt.Println("|<--|  |-->|") // SHOW OFF FUNCTION TO DISPLAY OPEN DOORS OR CLOSING DOORS OF ELEVATOR	
+	fmt.Println("|<--|  |-->|") // CALLED IN FUNCTION ASSIGN ELEVATOR  AND   REQUEST ELEVATOR
 	fmt.Println("|<--|  |-->|")
 	fmt.Println("|<--|  |-->|")
 	fmt.Println("|<--|  |-->|")
@@ -302,7 +334,7 @@ func (c *Column) Start() {
 	if c.userActualFloor == 1 && c.chosenElevator.currentFloor == 1 {
 		c.assignElevator(c.userDestination)
 	} else {
-		c.requestElevator(c.userActualFloor)
+		c.requestElevator(c.userActualFloor, c.userDestination)
 	}
 
 }
@@ -311,6 +343,8 @@ func main() {
 	battery := Battery{-6, 59, 66, []CallButton{}, []Column{}}
 	battery.createBattery(4, -6, 59)
 
+	// THOSE FUNCTION ARE PRE-MADE SEQUENCE TO SHOW HOW THE ELEVATOR IS ACTUALLY WORKING
+	// YOU CAN TRY EACH ONE OF THEM IN THE SECTION ABOVE
 	//###################### SECTION SCENARIO PICK THE ONE OF YOUR CHOICE ###################
 	//################################### SEQUENCE 1 ########################################
 

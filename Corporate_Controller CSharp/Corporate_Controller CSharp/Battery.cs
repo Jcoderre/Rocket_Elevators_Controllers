@@ -66,13 +66,15 @@ namespace Corporate_Controller_CSharp
                 FloorList.Add(y);
             }
             ////---------------- SELECT YOUR SEQUENCE -----------------//
-            sequence1();
+            //sequence1();
             //sequence2();
             //sequence3();
-            //sequence4();
+            sequence4();
             //---------------------------------------------------------//
         }
 
+        // THOSE FUNCTION ARE PRE-MADE SEQUENCE TO SHOW HOW THE ELEVATOR IS ACTUALLY WORKING 
+        // YOU CAN TRY EACH ONE OF THEM IN THE SECTION ABOVE
         public void sequence1()
         {
             Console.WriteLine("");

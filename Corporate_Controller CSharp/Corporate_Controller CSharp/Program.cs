@@ -49,3 +49,7 @@ namespace Corporate_Controller_CSharp
 
     }
 }
+
+//###########################################################
+//####### SELECT YOUR SEQUENCE IN THE BATTERY SECTION #######
+//###########################################################
