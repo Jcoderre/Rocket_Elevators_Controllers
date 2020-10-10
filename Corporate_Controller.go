@@ -210,8 +210,8 @@ func (c *Column) elevatorMoveDown(UserDestination int) {
 		c.chosenElevator.currentFloor--         // DECREMENT BY ONE
 		c.chosenElevator.isStatusIdle = false   // PUT ELEVATOR STATUS TO MOVING
 		c.chosenElevator.isDirectionUp = "Down" // PUT ELEVATOR MOVING  STATUS TO DOWN
-		if c.chosenElevator.currentFloor == 1 {
-			c.chosenElevator.currentFloor = 0
+		if c.chosenElevator.currentFloor == 0 {
+			c.chosenElevator.currentFloor = -1
 		}
 		fmt.Println("The elevator is at floor: ", c.chosenElevator.currentFloor)
 		if c.userDestination == c.chosenElevator.currentFloor { // IF THE THE ACTUAL FLOOR OF USER IS EQUAL TO ELEVATOR FLOOR STOP LOOPING
@@ -247,9 +247,16 @@ func (c *Column) requestElevator(userActualFloor int, userDestination int) {
 		c.chosenElevator.isDoorClose = true // SET DOOR TO CLOSE
 		c.chosenElevator.isDirectionUp = "Down"
 		c.elevatorMoveDown(userDestination)
-
 	}
-
+	if c.userActualFloor < c.userDestination {
+		c.chosenElevator.isDoorClose = true   // SET DOOR CLOSE
+		c.chosenElevator.isDirectionUp = "Up" // SET DIRECTION TO UP
+		c.elevatorMoveUp(userDestination)     // START FUNCTION ELEVATOR MOVE UP
+	} else if c.userActualFloor > c.userDestination {
+		c.chosenElevator.isDoorClose = true // SET DOOR TO CLOSE
+		c.chosenElevator.isDirectionUp = "Down"
+		c.elevatorMoveDown(userDestination)
+	}
 }
 
 //This method will be used for the requests made on the first floor.
@@ -294,7 +301,7 @@ func DoorClosing() {
 	fmt.Println("")
 	fmt.Println("_____  _____")
 	fmt.Println("|<--|  |-->|")
-	fmt.Println("|<--|  |-->|") // SHOW OFF FUNCTION TO DISPLAY OPEN DOORS OR CLOSING DOORS OF ELEVATOR	
+	fmt.Println("|<--|  |-->|") // SHOW OFF FUNCTION TO DISPLAY OPEN DOORS OR CLOSING DOORS OF ELEVATOR
 	fmt.Println("|<--|  |-->|") // CALLED IN FUNCTION ASSIGN ELEVATOR  AND   REQUEST ELEVATOR
 	fmt.Println("|<--|  |-->|")
 	fmt.Println("|<--|  |-->|")
@@ -347,47 +354,47 @@ func main() {
 	// YOU CAN TRY EACH ONE OF THEM IN THE SECTION ABOVE
 	//###################### SECTION SCENARIO PICK THE ONE OF YOUR CHOICE ###################
 	//################################### SEQUENCE 1 ########################################
-
-	fmt.Println("")
-	fmt.Println("")
-	fmt.Println("---------------------------------------------------")
-	fmt.Println("------------------ SEQUENCE 1 ---------------------")
-	fmt.Println("---------------------------------------------------")
-	fmt.Println("")
-	battery.columnList[1].elevatorList[0].changeElevatorValues(20, false, "Down")
-	//--
-	battery.columnList[1].elevatorList[1].changeElevatorValues(3, false, "Up")
-	//--
-	battery.columnList[1].elevatorList[2].changeElevatorValues(13, false, "Down")
-	//--
-	battery.columnList[1].elevatorList[3].changeElevatorValues(15, false, "Down")
-	//--
-	battery.columnList[1].elevatorList[4].changeElevatorValues(6, false, "Down")
-	//--
-	battery.columnList[1].changeUserValues("Up", 1, 20)
-	battery.columnList[1].Start()
-
+	
+		fmt.Println("")
+		fmt.Println("")
+		fmt.Println("---------------------------------------------------")
+		fmt.Println("------------------ SEQUENCE 1 ---------------------")
+		fmt.Println("---------------------------------------------------")
+		fmt.Println("")
+		battery.columnList[1].elevatorList[0].changeElevatorValues(20, false, "Down")
+		//--
+		battery.columnList[1].elevatorList[1].changeElevatorValues(3, false, "Up")
+		//--
+		battery.columnList[1].elevatorList[2].changeElevatorValues(13, false, "Down")
+		//--
+		battery.columnList[1].elevatorList[3].changeElevatorValues(15, false, "Down")
+		//--
+		battery.columnList[1].elevatorList[4].changeElevatorValues(6, false, "Down")
+		//--
+		battery.columnList[1].changeUserValues("Up", 1, 20)
+		battery.columnList[1].Start()
+	
 	//################################### SEQUENCE 2 ########################################
-
-	fmt.Println("")
-	fmt.Println("")
-	fmt.Println("---------------------------------------------------")
-	fmt.Println("------------------ SEQUENCE 2 ---------------------")
-	fmt.Println("---------------------------------------------------")
-	fmt.Println("")
-	battery.columnList[2].elevatorList[0].changeElevatorValues(1, true, "")
-	//--
-	battery.columnList[2].elevatorList[1].changeElevatorValues(23, false, "Up")
-	//--
-	battery.columnList[2].elevatorList[2].changeElevatorValues(33, false, "Down")
-	//--
-	battery.columnList[2].elevatorList[3].changeElevatorValues(40, false, "Down")
-	//--
-	battery.columnList[2].elevatorList[4].changeElevatorValues(39, false, "Down")
-	//--
-	battery.columnList[2].changeUserValues("Up", 1, 36)
-	battery.columnList[2].Start()
-
+	
+		fmt.Println("")
+		fmt.Println("")
+		fmt.Println("---------------------------------------------------")
+		fmt.Println("------------------ SEQUENCE 2 ---------------------")
+		fmt.Println("---------------------------------------------------")
+		fmt.Println("")
+		battery.columnList[2].elevatorList[0].changeElevatorValues(1, true, "")
+		//--
+		battery.columnList[2].elevatorList[1].changeElevatorValues(23, false, "Up")
+		//--
+		battery.columnList[2].elevatorList[2].changeElevatorValues(33, false, "Down")
+		//--
+		battery.columnList[2].elevatorList[3].changeElevatorValues(40, false, "Down")
+		//--
+		battery.columnList[2].elevatorList[4].changeElevatorValues(39, false, "Down")
+		//--
+		battery.columnList[2].changeUserValues("Up", 1, 36)
+		battery.columnList[2].Start()
+	
 	//################################### SEQUENCE 3 ########################################
 
 	fmt.Println("")
@@ -410,24 +417,24 @@ func main() {
 	battery.columnList[3].Start()
 
 	//################################### SEQUENCE 4 ########################################
-
-	fmt.Println("")
-	fmt.Println("")
-	fmt.Println("---------------------------------------------------")
-	fmt.Println("------------------ SEQUENCE 4 ---------------------")
-	fmt.Println("---------------------------------------------------")
-	fmt.Println("")
-	battery.columnList[0].elevatorList[0].changeElevatorValues(-4, true, "")
-	//--
-	battery.columnList[0].elevatorList[1].changeElevatorValues(1, true, "")
-	//--
-	battery.columnList[0].elevatorList[2].changeElevatorValues(-3, false, "Down")
-	//--
-	battery.columnList[0].elevatorList[3].changeElevatorValues(-6, false, "Up")
-	//--
-	battery.columnList[0].elevatorList[4].changeElevatorValues(-1, false, "Down")
-	//--
-	battery.columnList[0].changeUserValues("Up", -3, 1)
-	battery.columnList[0].Start()
-
+	
+		fmt.Println("")
+		fmt.Println("")
+		fmt.Println("---------------------------------------------------")
+		fmt.Println("------------------ SEQUENCE 4 ---------------------")
+		fmt.Println("---------------------------------------------------")
+		fmt.Println("")
+		battery.columnList[0].elevatorList[0].changeElevatorValues(-4, true, "")
+		//--
+		battery.columnList[0].elevatorList[1].changeElevatorValues(1, true, "")
+		//--
+		battery.columnList[0].elevatorList[2].changeElevatorValues(-3, false, "Down")
+		//--
+		battery.columnList[0].elevatorList[3].changeElevatorValues(-6, false, "Up")
+		//--
+		battery.columnList[0].elevatorList[4].changeElevatorValues(-1, false, "Down")
+		//--
+		battery.columnList[0].changeUserValues("Up", -3, 1)
+		battery.columnList[0].Start()
+	
 }
