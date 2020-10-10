@@ -25,4 +25,22 @@ I have imported for the python version the
 
 >Time
 
-This Repos while get update with new version for the Commercial algorithm soon !
+# Algorithm of Corporate controller
+## Using CSharp and Golang
+
+- For Csharp I have used :
+    > System;
+    
+    > System.Collections.Generic;
+
+- For Golang I have used 
+    > package main
+    
+    > import ("fmt")
+    
+## The code do the same as Residantial one but with more Column and a battery but still  Find you the best elevator that suits you
+
+This programms as been test In Compiled Language and Interpreted Language 
+A lot of hours of hard work have been made to create those programms 
+Theres a lot of thing that can be improve but i will still try my best over the CODEBOXX bootcamp
+to improve those file !
